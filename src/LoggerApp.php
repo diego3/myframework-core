@@ -1,4 +1,6 @@
 <?php
+namespace MyFrameWork;
+
 require_once PATH_LOCAL . '/vendor/log4php/Logger.php';
 require_once PATH_LOCAL . '/vendor/log4php/appenders/LoggerAppenderPhp.php';
 

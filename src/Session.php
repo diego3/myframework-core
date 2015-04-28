@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork;
+
 /* 
  * Classe que gerencia a sessão e o login
  */

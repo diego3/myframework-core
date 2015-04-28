@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork;
+
 require_once FACEBOOK_SDK_V4_SRC_DIR . 'autoload.php';
 
 use Facebook\FacebookSession;

@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork;
+
 /* 
  * Classe factory geradora de objetos
  */

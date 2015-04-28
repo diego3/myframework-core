@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork;
+
 /**
  * Classe utilitária para gerenciar o Cadastro, Edição, Alteração e Exclusão
  */

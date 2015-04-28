@@ -1,5 +1,6 @@
 <?php
 
+namespace MyFrameWork;
 
 /**
  * Classe responsável pelos trabalhos envolvendo email

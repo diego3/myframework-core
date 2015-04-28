@@ -1,5 +1,6 @@
 <?php
-require_once PATH_LOCAL . '/vendor/myframework/Template.php';
+
+namespace MyFrameWork;
 
 /**
  * Classe utilitária para geração de conteúdo HTML
