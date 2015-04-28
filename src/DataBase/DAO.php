@@ -1,4 +1,9 @@
 <?php
+
+namespace MyFrameWork\DataBase;
+
+use MyFrameWork\Factory;
+
 /* 
  * Classe DAO
  */

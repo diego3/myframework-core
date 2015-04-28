@@ -1,5 +1,7 @@
 <?php
-require_once PATH_MYFRAME . '/database/Where.php';
+namespace MyFrameWork\DataBase;
+
+use MyFrameWork\DataBase\Where;
 
 /* 
  * Classe que representa uma condição de uma consulta SQL a partir do FROM

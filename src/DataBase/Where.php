@@ -1,4 +1,5 @@
 <?php
+namespace MyFrameWork\DataBase;
 
 /*
  * Classe que contem regras para a criação de uma clausura WHERE ou HAVING

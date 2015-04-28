@@ -1,6 +1,10 @@
 <?php
-require_once PATH_MYFRAME . '/database/Where.php';
-require_once PATH_MYFRAME . '/database/Expression.php';
+
+namespace MyFrameWork\DataBase;
+        
+use MyFrameWork\DataBase\Where;
+use MyFrameWork\DataBase\Expression;
+use MyFrameWork\Factory;
 
 /* 
  * Classe utilitária para criação de consultas SQL

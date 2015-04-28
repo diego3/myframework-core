@@ -1,10 +1,9 @@
 <?php
 
-/**
- * Contém as classes de abstração do banco de dados Postgresql
- */
-require_once PATH_MYFRAME . '/database/DataBase.php';
-require_once PATH_MYFRAME . '/database/Query.php';
+namespace MyFrameWork\DataBase;
+
+use MyFrameWork\DataBase\DataBase,
+    MyFrameWork\DataBase\PgQuery;
 
 /**
  * Trabalha uma conexão com o banco Postgres.
@@ -40,9 +39,9 @@ class PgDataBase extends DataBase{
     
     /**
      * Retorna o ultimo id inserido
-     * @param string $name Nome da tabela
+     * @param string $nameOrTable Nome da tabela
      * @param string $column Nome da coluna
-     * @return type
+     * @return int
      */
     public function lastInsertId($nameOrTable = null, $column = null) {
         if (empty($column)) {
@@ -52,7 +51,4 @@ class PgDataBase extends DataBase{
             return parent::lastInsertId($nameOrTable . '_' . $column . '_seq');
         }
     }
-}
-
-class PgQuery extends Query {
 }

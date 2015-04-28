@@ -1,5 +1,9 @@
 <?php
 
+namespace MyFrameWork\DataBase;
+use MyFrameWork\Factory;
+use PDOException;
+
 /* 
  * Classe de banco genérica que herda de PDO
  */

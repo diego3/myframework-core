@@ -1,12 +1,12 @@
 <?php
+namespace MyFrameWork\DataBase;
+
+
+use MyFrameWork\DataBase\DataBase,
+    MyFrameWork\DataBase\MyQuery;
 
 /**
- * Contém as classes de abstração do banco de dados Mysql
- */
-require_once PATH_MYFRAME . '/database/DataBase.php';
-require_once PATH_MYFRAME . '/database/Query.php';
-
-/**
+ * 
  * Abstrai a lógica do banco de dados mysql
  */
 class MyDataBase extends DataBase {
@@ -47,7 +47,4 @@ class MyDataBase extends DataBase {
     public function lastInsertId($name = null, $column = null) {        
         return parent::lastInsertId(null);
     }
-}
-
-class MyQuery extends Query {
 }
