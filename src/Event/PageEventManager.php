@@ -1,7 +1,9 @@
 <?php
 
-require_once 'Event.php';
-require_once 'SubscriberInterface.php';
+namespace MyFrameWork\Event;
+
+use MyFrameWork\Event\ParameterEvent;
+use MyFrameWork\Event\SubscriberInterface;
 
 /**
  * Gerencia eventos entre requisições devido a não possibilidade de manter a instância do listener ativa durante o disparo do evento

@@ -1,6 +1,7 @@
 <?php
 
 
+namespace MyFrameWork\Event;
 
 /**
  * Description of Event

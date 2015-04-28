@@ -1,7 +1,9 @@
 <?php
 
-require_once 'Event.php';
-require_once 'SubscriberInterface.php';
+namespace MyFrameWork\Event;
+
+use MyFrameWork\Event\Event;
+use MyFrameWork\Event\SubscriberInterface;
 
 /**
  * Description of EventManager

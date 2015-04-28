@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork\Event;
+
 /**
  *
  * @author Diego Rosa dos Santos <diegosantos@alphaeditora.com.br>

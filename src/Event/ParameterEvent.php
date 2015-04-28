@@ -1,6 +1,8 @@
 <?php
 
-require_once "Event.php";
+namespace MyFrameWork\Event;
+
+use MyFrameWork\Event\Event;
 
 /**
  * Description of ParameterEvent
