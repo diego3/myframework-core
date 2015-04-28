@@ -1,5 +1,6 @@
 <?php
-require_once PATH_MYFRAME . '/response/Response.php';
+
+namespace MyFrameWork\Response;
 
 /* 
  * Classe response vazia

@@ -1,6 +1,6 @@
 <?php
-require_once PATH_MYFRAME . '/Template.php';
-require_once PATH_MYFRAME . '/response/Response.php';
+
+namespace MyFrameWork\Response;
 
 /* 
  * Classe response para HTML

@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork\Response;
+
 /* 
  * Interface Response para geradores de saída
  */
