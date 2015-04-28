@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork\Enum;
+
 /* 
  * Classe base para todos os enums utilizados no sistema
  */

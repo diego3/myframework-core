@@ -1,6 +1,8 @@
 <?php
 
-require_once PATH_MYFRAME . '/enum/BasicEnum.php';
+namespace MyFrameWork\Enum;
+
+use MyFrameWork\Enum\BasicEnum;
 
 abstract class RequestType extends BasicEnum {
     const GET = 'GET';

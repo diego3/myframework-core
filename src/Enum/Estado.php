@@ -1,6 +1,8 @@
 <?php
 
-require_once PATH_MYFRAME . '/enum/BasicEnum.php';
+namespace MyFrameWork\Enum;
+
+use MyFrameWork\Enum\BasicEnum;
 
 class Estado extends BasicEnum {
     const ACRE = 'AC';

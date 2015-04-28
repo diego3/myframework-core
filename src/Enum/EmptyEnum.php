@@ -1,8 +1,11 @@
 <?php
+namespace MyFrameWork\Enum;
 
-require_once PATH_MYFRAME . '/enum/BasicEnum.php';
+use MyFrameWork\Enum\BasicEnum;
 
 class EmptyEnum extends BasicEnum {
+    
     public function labels() {
+        
     }
 }

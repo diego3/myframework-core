@@ -1,10 +1,12 @@
 <?php
 
+namespace MyFrameWork\Enum;
+
+use MyFrameWork\Enum\BasicEnum;
+
 /* 
  * Define o tipo da resposta
  */
-require_once PATH_MYFRAME . '/enum/BasicEnum.php';
-
 abstract class ResponseType extends BasicEnum {
     const HTML = 'HTML';
     const JSON = 'JSON';
