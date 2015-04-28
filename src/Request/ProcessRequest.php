@@ -1,4 +1,7 @@
 <?php
+
+namespace MyFrameWork\Request;
+
 /* 
  * Classe genérica para todas as paginas contindas em page/*
  * Gerencia a requisição e a resposta para o cliente (processa a requisição)

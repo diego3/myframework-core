@@ -1,7 +1,10 @@
 <?php
-require_once PATH_MYFRAME . '/event/PageEventManager.php';
-require_once PATH_MYFRAME . '/request/ProcessRequest.php';
-require_once PATH_MYFRAME . '/event/PagePublisherInterface.php';
+
+namespace MyFrameWork\Request;
+
+use MyFrameWork\Event\PageEventManager;
+use MyFrameWork\Event\PagePublisherInterface;
+use MyFrameWork\Request\ProcessRequest;
 
 /**
  * Description of ProcessRequestPublisher

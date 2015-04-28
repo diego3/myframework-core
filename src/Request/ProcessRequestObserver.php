@@ -1,8 +1,10 @@
 <?php
 
-require_once PATH_MYFRAME . "/request/ProcessRequest.php";
-require_once PATH_MYFRAME . "/event/PublisherInterface.php";
-require_once PATH_MYFRAME . "/event/SubscriberInterface.php";
+namespace MyFrameWork\Request;
+
+use MyFrameWork\Event\PublisherInterface;
+use MyFrameWork\Event\SubscriberInterface;
+use MyFrameWork\Event\EventManager;
 
 /**
  * Description of ProcessRequestObserver
