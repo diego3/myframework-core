@@ -1,6 +1,6 @@
 O que é
 --------
-Framework caseiro para facilitar o densenvolvimento de aplicações web.
+Framework caseiro para facilitar o desenvolvimento de aplicações web.
 
 Intenção
 --------
@@ -9,9 +9,10 @@ Ser um framework simples e produtivo no desenvolvimento web.
 Instalação
 --------
 
- * baixar o skeleton  
+ * passo a passo do composer.json
+ * baixar o skeleton  [http://github/diego3/mycroframework-skeleton]
  * rodar o composer  [ composer install ]
- * acessar a url que instala o banco
+ * acessar a url que instala o banco [host/painel/instalar]
  * executar a aplicação
 
 Configuração do Apache
