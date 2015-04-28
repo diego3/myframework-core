@@ -2,7 +2,7 @@ O que é
 --------
 Framework caseiro para facilitar o densenvolvimento de aplicações web.
 
-Inteção
+Intenção
 --------
 Ser um framework simples e produtivo no desenvolvimento web.
 
