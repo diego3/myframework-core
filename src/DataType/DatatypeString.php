@@ -1,5 +1,8 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeText.php';
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeText;
+use MyFrameWork\HTML;
 
 /**
  * O tipo de dado string não permite valores com marcação HTML

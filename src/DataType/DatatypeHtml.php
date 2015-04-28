@@ -1,6 +1,11 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/Datatype.php';
+namespace MyFrameWork\DataType;
 
+use MyFrameWork\DataType\Datatype;
+
+/**
+ * Represent an Html Editor component
+ */
 class DatatypeHtml extends Datatype {
     
     public function getHTMLEditable($name, $value, $params, $attr=array()) {

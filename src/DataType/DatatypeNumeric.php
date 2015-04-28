@@ -1,9 +1,11 @@
 <?php
 
-require_once PATH_MYFRAME . '/datatype/Datatype.php';
-require_once PATH_LOCAL . '/vendor/Validation/main.php';
+namespace MyFrameWork\DataType;
 
+use MyFrameWork\DataType\Datatype;
 use Respect\Validation\Validator as v;
+
+//require_once PATH_LOCAL . '/vendor/Validation/main.php';
 
 /* 
  * Define o tipo de dado primitivo Numérico

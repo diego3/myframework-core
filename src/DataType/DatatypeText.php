@@ -1,5 +1,7 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeStringBase.php';
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeStringBase;
 
 /**
  * O tipo de dado texto não considera espaços no início e no final do texto

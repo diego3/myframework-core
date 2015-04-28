@@ -1,5 +1,8 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeStringBase.php';
+
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeStringBase;
 
 /* 
  * Define o tipo de dado email

@@ -1,5 +1,9 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/Datatype.php';
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\Datatype;
+use MyFrameWork\HTML;
+use MyFrameWork\MemoryPage;
 
 class DatatypeHtml extends Datatype {
     

@@ -1,11 +1,15 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeBoolean.php';
+
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeBoolean;
 
 /**
  * Nome abreviado do tipo de dado boolean
  * Representa o tipo de dado lógico
  */
 class DatatypeBool extends DatatypeBoolean {
+    
     /**
      * Processa o valor retornando-o no tipo base
      * @param mixed $value

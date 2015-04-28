@@ -1,5 +1,7 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeString.php';
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeString;
 
 class DatatypeColor extends DatatypeString {
     

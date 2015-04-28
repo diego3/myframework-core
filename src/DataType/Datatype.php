@@ -1,4 +1,7 @@
 <?php
+
+namespace MyFrameWork\DataType;
+
 /**
  * Classe base para os tipos de dados manipulados no sistema
  * Os tipos de dados podem ser primitivos ou complexos

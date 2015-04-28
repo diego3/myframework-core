@@ -1,5 +1,8 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/Datatype.php';
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\Datatype;
+use MyFrameWork\Factory;
 
 /* 
  * Define o tipo de dado Primary Key (chave primária)

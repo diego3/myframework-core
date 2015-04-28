@@ -1,9 +1,13 @@
 <?php
+namespace MyFrameWork\DataType;
 
-require_once PATH_MYFRAME . '/datatype/Datatype.php';
+use MyFrameWork\DataType\Datatype;
+use MyFrameWork\HTML;
+use MyFrameWork\Enum\Flag;
 
 class DatatypeUrl extends Datatype {
     
+    # TODO make validations for especific URL format ???
     
     public function getHTMLEditable($name, $value, $params, $attr = array()) {
         

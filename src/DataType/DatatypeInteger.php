@@ -1,5 +1,7 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeNumeric.php';
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeNumeric;
 
 /**
  * Representa o tipo de dado inteiro

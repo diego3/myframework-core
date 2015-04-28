@@ -1,9 +1,12 @@
 <?php
-require_once PATH_MYFRAME . '/datatype/DatatypeDate.php';
+
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeDate;
 
 /**
- * Nome abreviado do tipo de dado inteiro
- * Representa o tipo de dado inteiro
+ * Alias for DatatypeDate in PT_BR
  */
 class DatatypeData extends DatatypeDate {
+    
 }
