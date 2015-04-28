@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork;
+
 /* 
  * Automatiza o uso dos templates na aplicação
  * @see https://github.com/bobthecow/mustache.php

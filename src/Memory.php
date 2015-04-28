@@ -1,5 +1,7 @@
 <?php
 
+namespace MyFrameWork;
+
 /* 
  * Classe utilizada para armazenar dados na memória durante uma requisição
  * Utilizado para troca de informações entre métodos, sem a necessidade de passagem de parâmetros
