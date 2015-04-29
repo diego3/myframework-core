@@ -2,6 +2,15 @@
 
 namespace MyFrameWork;
 
+use MyFrameWork\Event\EventManager,
+    MyFrameWork\Event\PageEventManager;
+
+use MyFrameWork\DataBase\PgDataBase;
+use MyFrameWork\DataBase\MyDataBase;
+use MyFrameWork\Memory\Memory;
+use Logger;
+use ReflectionClass;
+
 /* 
  * Classe factory geradora de objetos
  */
@@ -17,12 +26,12 @@ class Factory {
         if (!endsWith($className, 'Response')) {
             $className .= 'Response';
         }
-        $fileName = PATH_MYFRAME . '/response/' . $className . '.php';
+        $fileName = PATH_MYFRAME . '/src/Response/' . $className . '.php';
        
         if (file_exists($fileName)) {
             require_once($fileName);
-            $factory = new ReflectionClass($className);
-            if ($factory->implementsInterface('Response')) {
+            $factory = new ReflectionClass('MyFrameWork\\Response\\'.$className);
+            if ($factory->implementsInterface('MyFrameWork\Response\Response')) {
                 return $factory->newInstance();
             }
             // @codeCoverageIgnoreStart
@@ -32,7 +41,7 @@ class Factory {
         }
         // @codeCoverageIgnoreEnd
        
-       require_once PATH_MYFRAME . '/response/EmptyResponse.php';
+       require_once PATH_MYFRAME . '/src/Response/EmptyResponse.php';
        return new EmptyResponse();
     }
     
@@ -42,39 +51,41 @@ class Factory {
      * @return \ProcessRequest
      */
     public static function page($page) {
-        require_once PATH_MYFRAME . '/request/ProcessRequest.php';
+        //require_once PATH_MYFRAME . '/src/Request/ProcessRequest.php';
         
         $className = ucfirst($page);
-        if (file_exists(PATH_APP . '/pages/' . $className . '.php')) {
+        if (file_exists(PATH_APP . '/Page/' . $className . '.php')) {
             //Carrega uma página da aplicação
             Memory::set('template', 'app');
-            $fileName = PATH_APP . '/pages/' . $className . '.php';
+            $fileName = PATH_APP . '/Page/' . $className . '.php';
         }
-        else if (file_exists(PATH_DEFAULT . '/pages/' . $className . '.php')) {
+        else if (file_exists(PATH_DEFAULT . '/Page/' . $className . '.php')) {
             //Carrega uma página default do framework
             Memory::set('template', 'default');
-            $fileName = PATH_DEFAULT . '/pages/' . $className . '.php';
+            $fileName = PATH_DEFAULT . '/Page/' . $className . '.php';
         }
         else {
             return self::page('ErrorPage');
         }
         
         require_once($fileName);
-
-        $factory = new ReflectionClass($className);
         
-        if($factory->implementsInterface("PublisherInterface")) {
-            require_once PATH_MYFRAME . '/event/EventManager.php';
+        
+        $factory = new \ReflectionClass("Application\\Page\\".$className);
+        
+        if($factory->implementsInterface("MyFrameWork\Event\PublisherInterface")) {
+            //require_once PATH_MYFRAME . '/src/Event/EventManager.php';
             
             return $factory->newInstance( EventManager::getInstance() );
         }
-        else if($factory->implementsInterface("PagePublisherInterface")) {
-            require_once PATH_MYFRAME . '/event/PageEventManager.php';
+        else if($factory->implementsInterface("MyFrameWork\Event\PagePublisherInterface")) {
+            //require_once PATH_MYFRAME . '/src/Event/PageEventManager.php';
             
             return $factory->newInstance(PageEventManager::getInstance());
         }
         else if ($factory->hasMethod('service') && !$factory->isAbstract()) {
-            return $factory->newInstance();
+            
+            return $factory->newInstanceWithoutConstructor();
         }
         else {
             // @codeCoverageIgnoreStart
@@ -131,12 +142,12 @@ class Factory {
 
         switch ($params['driver']) {
             case 'pgsql':
-                require_once PATH_MYFRAME . '/database/Postgresql.php';
+                require_once PATH_MYFRAME . '/src/DataBase/Postgresql.php';
                 self::$connections[$idx] = new PgDataBase($host, $dbname, $user, $password, $port);
                 break;
             
             case 'mysql':
-                require_once PATH_MYFRAME . '/database/Mysql.php';
+                require_once PATH_MYFRAME . '/src/DataBase/Mysql.php';
                 self::$connections[$idx] = new MyDataBase($host, $dbname, $user, $password, $port);
                 break;
             
@@ -174,12 +185,12 @@ class Factory {
         if (!isset(self::$daos[$daokey])) {
             self::$daos[$daokey] = null;
             // @codeCoverageIgnoreStart
-            if (file_exists(PATH_APP . '/model/dao/' . $className . '.php')) {
-                require_once(PATH_APP . '/model/dao/' . $className . '.php');
+            if (file_exists(PATH_APP . '/Model/Dao/' . $className . '.php')) {
+                require_once(PATH_APP . '/Model/Dao/' . $className . '.php');
             }
             // @codeCoverageIgnoreEnd
-            else if (file_exists(PATH_DEFAULT . '/dao/' . $className . '.php')) {
-                require_once(PATH_DEFAULT . '/dao/' . $className . '.php');
+            else if (file_exists(PATH_DEFAULT . '/Model/Dao/' . $className . '.php')) {
+                require_once(PATH_DEFAULT . '/Model/Dao/' . $className . '.php');
             }
             else {
                 self::log()->info('A classe DAO " ' . $daoName . '" não existe');
@@ -214,6 +225,8 @@ class Factory {
      * @return Logger
      */
     public static function log() {
+        require_once PATH_LOCAL . '/vendor/apache/log4php/src/main/php/Logger.php';
+        
         if (Memory::get('debug', false)) {
             return Logger::getLogger('debug');
         }
@@ -238,7 +251,7 @@ class Factory {
             $name = 'Datatype' . ucfirst($name);
         }
         if (!isset(self::$datatypes[$name])) {
-            $fileName = PATH_MYFRAME . '/datatype/' . $name . '.php';
+            $fileName = PATH_MYFRAME . '/src/DataType/' . $name . '.php';
             self::$datatypes[$name] = null;
             if (file_exists($fileName)) {
                 require_once($fileName);
@@ -271,8 +284,8 @@ class Factory {
     public static function enum($name) {
         $name = ucfirst($name);
         if (!isset(self::$enums[$name])) {
-            $fileName = PATH_MYFRAME . '/enum/' . $name . '.php';
-            $fileName2 = PATH_APP . '/model/enum/' . $name . '.php';
+            $fileName = PATH_MYFRAME . '/src/Enum/' . $name . '.php';
+            $fileName2 = PATH_APP . '/Model/Enum/' . $name . '.php';
             self::$enums[$name] = null;
             if (file_exists($fileName)) {
                 require_once($fileName);

@@ -2,6 +2,8 @@
 
 namespace MyFrameWork;
 
+use MyFrameWork\Factory;
+
 /* 
  * Automatiza o uso dos templates na aplicação
  * @see https://github.com/bobthecow/mustache.php
@@ -30,12 +32,12 @@ class Template {
     private $mm;
     
     protected function __construct() {
-        require_once PATH_LOCAL . '/vendor/Mustache/Autoloader.php';
-        Mustache_Autoloader::register();
+        require_once PATH_LOCAL . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
+        \Mustache_Autoloader::register();
         
-        $this->mustache = new Mustache_Engine($this->getEngineData(PATH_DEFAULT . '/view'));
-        $this->mustacheapp = new Mustache_Engine($this->getEngineData(PATH_APP . '/' . $this->templatename));
-        $this->mm = new Mustache_Engine();
+        $this->mustache = new \Mustache_Engine($this->getEngineData(PATH_DEFAULT . '/view'));
+        $this->mustacheapp = new \Mustache_Engine($this->getEngineData(PATH_APP . '/' . $this->templatename));
+        $this->mm = new \Mustache_Engine();
     }
     
     /**
@@ -43,17 +45,17 @@ class Template {
      * @return array
      */
     protected function getEngineData($pathTemplate) {
-        $partials = new Mustache_Loader_FilesystemLoader(PATH_DEFAULT . '/view/partials');
+        $partials = new \Mustache_Loader_FilesystemLoader(PATH_DEFAULT . '/view/partials');
         if (!startsWith($pathTemplate, PATH_DEFAULT)) {
-            $partials = new Mustache_Loader_CascadingLoader(
-                array($partials, new Mustache_Loader_FilesystemLoader($pathTemplate))
+            $partials = new \Mustache_Loader_CascadingLoader(
+                array($partials, new \Mustache_Loader_FilesystemLoader($pathTemplate))
             );
         }
        
         return array(
             'template_class_prefix' => '__MyTemplates_',
             'cache' => PATH_TEMP . '/cache/mustache',
-            'loader' => new Mustache_Loader_FilesystemLoader($pathTemplate),
+            'loader' => new \Mustache_Loader_FilesystemLoader($pathTemplate),
             'partials_loader' => $partials,
             'charset' => 'UTF-8',
         );

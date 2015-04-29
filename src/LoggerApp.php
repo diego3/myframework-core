@@ -1,8 +1,11 @@
 <?php
-namespace MyFrameWork;
+//namespace MyFrameWork;
 
-require_once PATH_LOCAL . '/vendor/log4php/Logger.php';
-require_once PATH_LOCAL . '/vendor/log4php/appenders/LoggerAppenderPhp.php';
+use MyFrameWork\Factory;
+
+require_once PATH_LOCAL . '/vendor/apache/log4php/src/main/php/Logger.php';
+require_once PATH_LOCAL . '/vendor/apache/log4php/src/main/php/appenders/LoggerAppenderPhp.php';
+
 
 class LoggerApp extends LoggerAppenderPhp {
     protected static $errors = array();

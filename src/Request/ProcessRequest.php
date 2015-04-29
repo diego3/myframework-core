@@ -2,6 +2,13 @@
 
 namespace MyFrameWork\Request;
 
+use MyFrameWork\Enum\RequestType;
+use MyFrameWork\Enum\ResponseType;
+use MyFrameWork\Factory;
+use MyFrameWork\Session;
+use MyFrameWork\Memory\MemoryPage;
+
+
 /* 
  * Classe genérica para todas as paginas contindas em page/*
  * Gerencia a requisição e a resposta para o cliente (processa a requisição)
@@ -145,7 +152,10 @@ abstract class ProcessRequest {
             $this->render = !is_null($result) && $result;
         }
         if ($this->render && empty($this->filename)) {
-            $this->filename = strtolower(get_class($this)) . $method;
+            $classFCNS = strtolower(get_class($this));
+            
+            $slahExploded = explode("\\", $classFCNS);
+            $this->filename = $slahExploded[count($slahExploded)-1] . $method;
         }
     }
     
@@ -246,7 +256,7 @@ abstract class ProcessRequest {
             );
         }
         $this->pagedata[SERVER_MODE] = true;
-        $this->pagedata['error'] = LoggerApp::getErrors();
+        $this->pagedata['error'] = \LoggerApp::getErrors();
         return $this->pagedata;
     }
     
