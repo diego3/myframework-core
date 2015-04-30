@@ -7,7 +7,7 @@ use MyFrameWork\Enum\ResponseType;
 use MyFrameWork\Factory;
 use MyFrameWork\Session;
 use MyFrameWork\Memory\MemoryPage;
-
+use MyFrameWork\LoggerApp;
 
 /* 
  * Classe genérica para todas as paginas contindas em page/*
@@ -256,7 +256,7 @@ abstract class ProcessRequest {
             );
         }
         $this->pagedata[SERVER_MODE] = true;
-        $this->pagedata['error'] = \LoggerApp::getErrors();
+        $this->pagedata['error'] = LoggerApp::getErrors();
         return $this->pagedata;
     }
     
