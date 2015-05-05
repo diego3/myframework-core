@@ -8,7 +8,7 @@ use PDOException;
  * Classe de banco genérica que herda de PDO
  */
 
-abstract class DataBase extends PDO {
+abstract class DataBase extends \PDO {
     
     /**
      *
@@ -48,7 +48,7 @@ abstract class DataBase extends PDO {
         }
         catch (PDOException $e) {
             Factory::log()->info($e->getMessage());
-            Factory::log()->fatal("[".date('d/m/Y H:m:i')."]Falha ao conectar-se com o banco de dados erro: {$e->getMessage()}", $e);
+            Factory::log()->fatal("[".date('H:m:i')."]Falha ao conectar-se com o banco de dados erro: {$e->getMessage()}", $e);
         }
     }
     
@@ -106,7 +106,7 @@ abstract class DataBase extends PDO {
             return !is_null($returnValue) ? $returnValue : array();
         }
         if ($this->execute($sql, $params)) {
-            $this->statement->setFetchMode(PDO::FETCH_ASSOC);
+            $this->statement->setFetchMode(\PDO::FETCH_ASSOC);
             $returnValue = $this->statement->fetch();
             return !is_null($returnValue) ? $returnValue : array();
         }
@@ -121,13 +121,13 @@ abstract class DataBase extends PDO {
      */
     public function fetchField($sql=null, $params=array()) {
         if (is_null($sql)) {
-            $result = $this->statement->fetch(PDO::FETCH_NUM);
+            $result = $this->statement->fetch(\PDO::FETCH_NUM);
             if (isset($result[0])) {
                 return $result[0];
             }
         }
         if ($this->execute($sql, $params)) {
-            $result = $this->statement->fetch(PDO::FETCH_NUM);
+            $result = $this->statement->fetch(\PDO::FETCH_NUM);
             if (isset($result[0])) {
                 return $result[0];
             }
