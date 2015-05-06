@@ -54,7 +54,7 @@ class DatatypeDate extends Datatype {
             $format = $this->getDateFormat($params);
             $date = array_combine(explode('-', $format), explode('-', $value));
             if (checkdate($date['m'], $date['d'], $date['Y'])) {
-                return DateTime::createFromFormat('Y-m-d', $date['Y'] . '-' . $date['m'] . '-' . $date['d']);
+                return \DateTime::createFromFormat('Y-m-d', $date['Y'] . '-' . $date['m'] . '-' . $date['d']);
             }
         }
         return null;
@@ -64,7 +64,7 @@ class DatatypeDate extends Datatype {
         if ($this->isEmpty($value)) {
             return false;
         }
-        else if ($value instanceof DateTime) {
+        else if ($value instanceof \DateTime) {
             return true;
         }
         $format = explode('-', $this->getDateFormat($params));
