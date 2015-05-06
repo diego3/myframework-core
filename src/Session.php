@@ -2,6 +2,8 @@
 
 namespace MyFrameWork;
 
+use MyFrameWork\Factory;
+
 /* 
  * Classe que gerencia a sessão e o login
  */
@@ -41,9 +43,9 @@ class Session {
     // @codeCoverageIgnoreEnd
     
     /**
-     * Attempt to sing in both portuguese-app and website systems
+     * 
      * @param string $usuario Nome do usuário ou email
-     * @param string $password Senha with hash, because in database store it with hash too
+     * @param string $password Senha com hash ou criptografada
      * @return bool
      */
     public function login($usuario, $password) {

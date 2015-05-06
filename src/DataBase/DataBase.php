@@ -1,18 +1,20 @@
 <?php
 
 namespace MyFrameWork\DataBase;
+
 use MyFrameWork\Factory;
 use PDOException;
+use PDO;
 
 /* 
  * Classe de banco genérica que herda de PDO
  */
 
-abstract class DataBase extends \PDO {
+abstract class DataBase extends PDO {
     
     /**
      *
-     * @var PDOStatement 
+     * @var \PDOStatement 
      */
     protected $statement;
     
@@ -29,7 +31,7 @@ abstract class DataBase extends \PDO {
     
     /**
      * Retorna o objeto query para o banco de dados
-     * @return \Query
+     * @return MyFrameWork\DataBase\Query
      */
     public abstract function getQuery();
     
@@ -246,7 +248,7 @@ abstract class DataBase extends \PDO {
     
     /**
      * 
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     public function getStatement() {
         return $this->statement;

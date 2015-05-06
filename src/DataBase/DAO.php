@@ -3,6 +3,7 @@
 namespace MyFrameWork\DataBase;
 
 use MyFrameWork\Factory;
+use PDOException;
 
 /* 
  * Classe DAO
@@ -10,7 +11,7 @@ use MyFrameWork\Factory;
 abstract class DAO {
     /**
      * Conexão com o banco de dados
-     * @var DataBase
+     * @var MyFrameWork\DataBase\DataBase
      */
     protected $db;
     
@@ -40,13 +41,13 @@ abstract class DAO {
     
     /**
      * List of DAOS
-     * @var DAO[] array
+     * @var \DAO[] array
      */
     protected $daos = array();
     
     /**
      * Cria o objeto DAO
-     * @param DataBase $db
+     * @param MyFrameWork\DataBase\DataBase $db
      */
     public function __construct($db=null) {
         if ($db) {
@@ -65,7 +66,7 @@ abstract class DAO {
     
     /**
      * Return the database object
-     * @return DataBase
+     * @return MyFrameWork\DataBase\DataBase
      */
     public function getDatabase() {
         return $this->db;
@@ -253,19 +254,6 @@ abstract class DAO {
      */
     public function listAll($order=array(), $begin=0, $limit=100) {
         return $this->listByCondition('*', array(), $order, $begin, $limit);
-    }
-    
-    /**
-     * Executa um comando no banco sem usar as classes utilitarias do framework
-     * @param string $sql_query
-     * @return array os resultado da busca
-     * @throws Exception Caso a query seja vazia ou nula
-     */
-    public function find($sql_query, $params=array()) {
-        if(is_null($sql_query) or empty($sql_query)) {
-            throw new Exception("parametro sql_query invalido no metodo find da classe DAO ", get_class($this));
-        }
-        return $this->db->fetchAll($sql_query, $params);
     }
     
     /**
