@@ -193,15 +193,17 @@ function httpRequest($method, $url, $data=array(), $output='html') {
     else {
         $url .= '?' . http_build_query($data);
     }
+    
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);//fix 301 http code
+    
     $content = curl_exec($ch);
     curl_close($ch);
     
     if( !$content ) {
-       throw new Exception("Curl error : " . curl_error($ch));
+       throw new \Exception("Curl error : " . curl_error($ch));
     }
     switch (strtolower($output)) {
         case 'xml':
@@ -248,10 +250,6 @@ function redirect($url, $message='', $time=0) {
     }
 }
 // @codeCoverageIgnoreEnd
-
-function hashit($password, $salt=UPSALT) {
-    return md5($password . $salt);
-}
 
 function debug($on=true) {
     MemoryPage::add('debug', $on);
