@@ -1,6 +1,7 @@
 <?php
 
-use MyFrameWork\MemoryPage;
+use MyFrameWork\Memory\MemoryPage;
+use MyFrameWork\Memory\Memory;
 /* 
  * Utilities functions to use in PHP
  */
@@ -253,8 +254,6 @@ function hashit($password, $salt=UPSALT) {
 }
 
 function debug($on=true) {
-    
-    //require_once "Memory/MemoryPage.php";
     MemoryPage::add('debug', $on);
 }
 
@@ -291,6 +290,5 @@ function dump($var){
 
 function sysout($log_text) {
     $path = str_replace("/", "\\", PATH_LOCAL . "/sysout.log");
-    //dump($path); exit;
     file_put_contents($path, $log_text, FILE_APPEND);
 }

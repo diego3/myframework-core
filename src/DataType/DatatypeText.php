@@ -3,6 +3,7 @@ namespace MyFrameWork\DataType;
 
 use MyFrameWork\DataType\DatatypeStringBase;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\HTML;
 
 /**
  * O tipo de dado texto não considera espaços no início e no final do texto

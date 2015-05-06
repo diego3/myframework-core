@@ -2,6 +2,8 @@
 
 namespace MyFrameWork\DataType;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\Factory;
+use MyFrameWork\HTML;
 
 /**
  * Classe base para os tipos de dados manipulados no sistema
@@ -58,7 +60,7 @@ abstract class Datatype {
     }
     
     /**
-     * Recebe o dado no formato humano e realia a limpeza e processamento do mesmo
+     * Recebe o dado no formato humano e realiza a limpeza e processamento do mesmo
      * @param mixed $value Valor recebido (normalmente é uma string)
      * @param array $params Lista de parâmetros utilizados no processamento do valor
      * @return mixed O valor processado

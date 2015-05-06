@@ -1,6 +1,10 @@
 <?php
 
 namespace MyFrameWork;
+use MyFrameWork\Enum\Flag;
+use MyFrameWork\Factory;
+use MyFrameWork\Template;
+use MyFrameWork\HTML;
 
 /**
  * Classe utilitária para gerenciar o Cadastro, Edição, Alteração e Exclusão

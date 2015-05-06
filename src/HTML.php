@@ -1,6 +1,7 @@
 <?php
 
 namespace MyFrameWork;
+use MyFrameWork\Template;
 
 /**
  * Classe utilitária para geração de conteúdo HTML

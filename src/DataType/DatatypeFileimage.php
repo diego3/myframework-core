@@ -3,6 +3,8 @@ namespace MyFrameWork\DataType;
 
 use MyFrameWork\DataType\Datatype;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\Memory\MemoryPage;
+use MyFrameWork\HTML;
 
 /* 
  * Define o tipo de dado file
@@ -27,12 +29,13 @@ class DatatypeFileimage extends Datatype {
     }
     
     public function getHTMLEditable($name, $value, $params, $attr=array()) {
+        MemoryPage::addCss('static/css/page/filemanager.css');
         MemoryPage::addJs("js/modal-fileupload.js");
         MemoryPage::addJs("static/plugin/bootstrap-fileinput-master/js/fileinput.min.js");
         MemoryPage::addCss('static/plugin/bootstrap-fileinput-master/css/fileinput.min.css');
         
         $params = $this->normalizeParams($params);
-        $link = 'filemanager/?path=' . getValueFromArray($params, Flag::MOVE_TO, 'image/empresa') . '&header=false';
+        $link = 'filemanager/index?path=' . getValueFromArray($params, Flag::MOVE_TO, 'image/') . '&header=false';
         $linkextra = array(
             'data-toggle' => 'modal',
             'data-target' =>  '#myFileUpload',
