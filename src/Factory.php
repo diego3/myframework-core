@@ -85,7 +85,7 @@ class Factory {
         }
         else if ($factory->hasMethod('service') && !$factory->isAbstract()) {
             
-            return $factory->newInstanceWithoutConstructor();
+            return $factory->newInstance();
         }
         else {
             // @codeCoverageIgnoreStart
