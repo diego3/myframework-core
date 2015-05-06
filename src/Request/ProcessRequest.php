@@ -132,7 +132,8 @@ abstract class ProcessRequest {
             }
             else {
                 //TODO permissão negada
-                die('Acesso negado');
+                $deniedaccess = Factory::page("DeniedacessPage");
+                $deniedaccess->service(ProcessRequest::getMethod(), "_index", ResponseType::getDefaultType());
             }
             $this->posProcess();
         }
