@@ -11,7 +11,7 @@ use PDOException;
 abstract class DAO {
     /**
      * Conexão com o banco de dados
-     * @var MyFrameWork\DataBase\DataBase
+     * @var \MyFrameWork\DataBase\DataBase
      */
     protected $db;
     
@@ -47,7 +47,7 @@ abstract class DAO {
     
     /**
      * Cria o objeto DAO
-     * @param MyFrameWork\DataBase\DataBase $db
+     * @param \MyFrameWork\DataBase\DataBase $db
      */
     public function __construct($db=null) {
         if ($db) {
@@ -66,7 +66,7 @@ abstract class DAO {
     
     /**
      * Return the database object
-     * @return MyFrameWork\DataBase\DataBase
+     * @return \MyFrameWork\DataBase\DataBase
      */
     public function getDatabase() {
         return $this->db;
