@@ -3,6 +3,7 @@ namespace MyFrameWork\DataType;
 
 use MyFrameWork\DataType\Datatype;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\HTML;
 
 /* 
  * Define o tipo de dado Data
@@ -78,6 +79,18 @@ class DatatypeDate extends Datatype {
     
     public function isEmpty($value) {
         return empty($value);
+    }
+    
+    public function getHTMLEditable($name, $value, $params, $attr=array()) {
+        $params = $this->normalizeParams($params);
+        if (empty($value)) {
+            $attr['value'] = getValueFromArray($params, Flag::DEFAULT_VALUE, '');
+        }
+        else {
+            $attr['value'] = $value;
+        }
+        $attr = $this->getHTMLAttributes($attr, $params);
+        return HTML::input($name, $attr, $name . "_id", "date");
     }
 }
 

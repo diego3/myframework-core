@@ -4,6 +4,7 @@ namespace MyFrameWork\DataType;
 use MyFrameWork\DataType\Datatype;
 use MyFrameWork\Factory;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\HTML;
 
 /* 
  * Define o tipo de dado Primary Key (chave primária)
