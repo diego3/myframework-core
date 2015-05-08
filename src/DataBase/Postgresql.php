@@ -5,6 +5,10 @@ namespace MyFrameWork\DataBase;
 use MyFrameWork\DataBase\DataBase,
     MyFrameWork\DataBase\PgQuery;
 
+use PDOException;
+use MyFrameWork\Factory;
+
+
 /**
  * Trabalha uma conexão com o banco Postgres.
  */
@@ -44,11 +48,17 @@ class PgDataBase extends DataBase{
      * @return int
      */
     public function lastInsertId($nameOrTable = null, $column = null) {
-        if (empty($column)) {
-            return parent::lastInsertId($nameOrTable);
-        }
-        else {
-            return parent::lastInsertId($nameOrTable . '_' . $column . '_seq');
+        try{
+            if (empty($column)) {
+                return parent::lastInsertId($nameOrTable);
+            }
+            else {
+                return parent::lastInsertId($nameOrTable . '_' . $column . '_seq');
+            }
+        } catch (PDOException $e) {
+            Factory::log()->info($e->getMessage());
+            Factory::log()->fatal("[".date('H:m:i')."]Falha ao executar uma query\nerror: {$e->getMessage()}", $e);
+            return -1;
         }
     }
 }
