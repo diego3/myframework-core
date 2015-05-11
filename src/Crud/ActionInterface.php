@@ -7,7 +7,7 @@ namespace MyFrameWork\Crud;
  *
  * @author Diego
  */
-class ActionInterface {
+interface ActionInterface {
     
     /**
      * Uma action nesse contexto representa o link que executa uma ação específica
