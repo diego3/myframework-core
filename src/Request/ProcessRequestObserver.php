@@ -4,6 +4,7 @@ namespace MyFrameWork\Request;
 
 use MyFrameWork\Event\PublisherInterface;
 use MyFrameWork\Event\SubscriberInterface;
+use MyFrameWork\Event\ParameterEvent;
 use MyFrameWork\Event\EventManager;
 
 /**
@@ -27,10 +28,11 @@ abstract class ProcessRequestObserver extends ProcessRequest implements Publishe
         return $this->em;
     }
     
+    //@todo esta ouvindo a si mesmo, e se outro page tambem quiser se registrar ?
     public function getSubscribedEvents() {
-        return array(
-            
-        );
+        return [
+            //"ConstanteEvent" => "callbackMethod"
+        ];
     }
     
     protected function isValidParameters() {

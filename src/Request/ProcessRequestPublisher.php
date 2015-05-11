@@ -4,6 +4,7 @@ namespace MyFrameWork\Request;
 
 use MyFrameWork\Event\PageEventManager;
 use MyFrameWork\Event\PagePublisherInterface;
+use MyFrameWork\Event\ParameterEvent;
 use MyFrameWork\Request\ProcessRequest;
 
 /**

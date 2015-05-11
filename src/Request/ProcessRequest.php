@@ -337,8 +337,8 @@ abstract class ProcessRequest {
                 $received = filter_input(RequestType::getInternalInput($method), $itemname, FILTER_UNSAFE_RAW);
                 $log->debug('$_' . $method . '["' . $itemname . '"]: ' . var_export($received, true));                
                 $type = Factory::datatype($itemdata['type']);
-                $cleaned = $type->sanitize($received, $itemdata['params']);
-                if (!$type->isValid($cleaned, $itemdata['params'])) {
+                $cleaned = $type->sanitize($received, $itemdata['params']);//faz os filtros, verifica os tipos e tals
+                if (!$type->isValid($cleaned, $itemdata['params'])) {//chama os metodos isValid* da biblioteca respect/Validator
                     $this->parametersMeta[$method][$itemname]['error'] = LoggerApp::getLastError();
                     continue;
                 }
