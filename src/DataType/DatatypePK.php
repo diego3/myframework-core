@@ -12,7 +12,8 @@ use MyFrameWork\HTML;
 class DatatypePK extends Datatype {
     
     protected function _sanitize($value, $params) {
-        return filter_var($value, FILTER_SANITIZE_STRING);
+        return $value;
+        //return filter_var($value, FILTER_SANITIZE_STRING);
     }
     
     protected function _isValid($value, $params) {
