@@ -38,6 +38,12 @@ class Crud {
     protected $dados = null;
     
     /**
+     * Qualquer classe que implemente a ActionInterface
+     * @var  \MyFrameWork\Crud\ActionInterface
+     */
+    protected $table_action;
+    
+    /**
      * Define o modo render baseado na tabela
      */
     const BROWSE_TABLE = 1;
@@ -94,9 +100,12 @@ class Crud {
         }
         else {
             //Alterar
-            $action = $this->urlbase . getValueFromArray($this->config, self::ACTION_URL_SAVE,  $id . '/save');
-            $formvalues = array_merge($this->dao->getById($id), $formvalues); 
+            $action = $this->urlbase . getValueFromArray($this->config, self::ACTION_URL_SAVE,  'save/'. $id);
+            $result = $this->dao->getById($id);
+            $formvalues = $result;
+            //$formvalues = array_merge($result, $formvalues); 
         }
+        
         $r = ['action' => $action,
             'class' => 'form-horizontal crud',
             'method' => 'post',
@@ -106,14 +115,15 @@ class Crud {
         foreach ($formdata as $fieldname => $params) {            
             if (getValueFromArray($params['params'], Flag::VISIBLE, true)) {
                 $r['formgroup'][] = [
-                        'formitem' => [
-                            'id'       => $fieldname . '_id',
-                            'label'    => getValueFromArray($params['params'], Flag::LABEL, ''),
-                            'item'     => Factory::datatype($params['type'])->getHTMLEditable($fieldname, getValueFromArray($formvalues, $fieldname, ''), $params['params']),
-                            'required' => in_array(Flag::REQUIRED, $params['params']) || getValueFromArray($params['params'], Flag::REQUIRED, false),
-                            'error'    => getValueFromArray($params, 'error')
-                        ]
-                    ];
+                    'formitem' => [
+                        'id'       => $fieldname . '_id',
+                        'label'    => getValueFromArray($params['params'], Flag::LABEL, ''),
+                        'item'     => Factory::datatype($params['type'])->getHTMLEditable($fieldname, getValueFromArray($formvalues, $fieldname, ''), $params['params']),
+                        'required' => in_array(Flag::REQUIRED, $params['params']) || getValueFromArray($params['params'], Flag::REQUIRED, false),
+                        'error'    => getValueFromArray($params, 'error'),
+                        'ischeckbox' => $params['type'] == 'bool'
+                    ]
+                ];
             }
             else {
                 $r['hidden'][] = ['name' => $fieldname, 'value' => getValueFromArray($formvalues, $fieldname, '')];
@@ -146,12 +156,30 @@ class Crud {
     }
     
     /**
+     * 
+     * @param int $id        O identificador da tabela
+     * @param array $values  Os valores depois do processo de limpeza e validação
+     * @return mixed         Boolean em caso de sucesso ou falha ou a mensagem de erro lançada na PDOException 
+     */
+    public function salvar($id, $values) {
+        if (empty($id)) {
+            //INSERT
+            return $this->dao->insert($values);
+        }
+        else {
+            //UPDATE
+            return $this->dao->update($values, $id);
+        }
+    }
+    
+    /**
      * Define os dados para uma chamada browse.
      * Geralmente qualquer retorno de tipo fetch do PDO, ou seja,
      * você pode usar qualquer retorno de um DAO.
      * Geralmente esse método é utilizado para popular a tabela com alguma
      * consulta mais elaborada, sendo assim, sobrescrevendo o comportamento 
      * padrão do crud, que usa o DAO::listAll
+     * 
      * @param array $dados
      */
     public function setDados(array $dados) {
@@ -160,8 +188,8 @@ class Crud {
     
     /**
      * Define uma configuração específica para o CRUD
-     * @param Crud::CONST $param Use sempre 
-     * @param mixed $value O valor da configuração
+     * @param Crud::CONST $param   Use sempre as constantes
+     * @param mixed $value         O valor da configuração
      * @return \MyFrameWork\Crud
      */
     public function setConfig($param, $value) {
@@ -171,9 +199,9 @@ class Crud {
     
     /**
      * 
-     * @param string $title
-     * @param array $schema
-     * @param int $mode
+     * @param string $title  Um simples título
+     * @param array $schema  O esquema utilizado na renderização da view
+     * @param int $mode      Modo de renderização da view por padrão é uma tabela
      * @return array
      */
     public function browse($title, $schema, $mode = self::BROWSE_TABLE) {
@@ -188,8 +216,9 @@ class Crud {
             default:
                 $pagedata['tabledata'] = $this->getTable($dados, $schema);
         }
-        $pagedata['title'] = 'Lista de ' . $title;
-        $pagedata['breadcrumb'] = ['items' => [
+        $pagedata['title'] = 'Lista de ' . ucfirst(str_replace("/", "",$title)) . "s" ;
+        $pagedata['breadcrumb'] = ['items' => 
+            [
                 ['url' => 'main/dashboard', 'label' => 'Home'],
                 ['label' => $title ]
             ]
@@ -198,7 +227,7 @@ class Crud {
             array(
                 'class' => 'btn btn-primary btn-success',
                 'label' => 'Novo Registro',
-                'url' => $this->urlbase . getValueFromArray($this->config, self::ACTION_URL_NEWBUTTON, 'edit')
+                'url' => getValueFromArray($this->config, static::ACTION_URL_NEWBUTTON, $this->urlbase . 'edit')
             )
         );
         return $pagedata;
@@ -232,27 +261,58 @@ class Crud {
                 $td[] = $t->renderHTML($template, $row);
             }
             if ($action) {
-                $td[] = HTML::link(
+                $actions = HTML::link(
                     $t->renderHTML($urledit, $row),//href
                     '<span class="glyphicon glyphicon-pencil"></span>',//label
                     'Editar este item',//titulo
-                    ['class' => 'btn btn-default btn-xs']//extra
-                ) . ' ' . HTML::link(
+                    ['class' => 'btn btn-default btn-xs']//atributos extras 
+                );
+                
+                $actions .= ' ' . $this->getUserActions($t, $row);
+
+                $actions .= ' ' . HTML::link(
                     $t->renderHTML($urldelete, $row),
                     '<span class="glyphicon glyphicon-trash"></span>',
                     'Excluir este item',
                     ['class' => 'btn btn-danger  btn-xs confirmacao']
                 );
+                
+                $td[] = $actions;
             }
             $r['tbody'][] = $td;
         }
         return $r;
     }
     
+    
+    
+    /**
+     * 
+     * @param \MyFrameWork\Crud\ActionInterface $object
+     * @return \MyFrameWork\Crud
+     */
+    public function setTableAction(\MyFrameWork\Crud\ActionInterface $object) {
+        $this->table_action = $object;
+        return $this;
+    }
+    
+    /**
+     * Retorna as actions que o usuário definiu para a última tabela
+     * @param Mustache_Engine $mustache  Instância do mustache
+     * @param array $row                 Linha de dados do banco de dados
+     * @return string                    Retorna o html da(s) action(s)
+     */
+    protected function getUserActions($mustache, $row) {
+        if(null !== $this->table_action) {
+            return $this->table_action->getActions($mustache, $row);
+        }
+        return "";
+    }
+    
     /**
      * 
      * @param int $id
-     * @return bool
+     * @return mixed Boolean em caso de sucesso ou falha na operação ou a mensagem da PDOException caso seja lançada
      */
     public function delete($id) {
         return $this->dao->delete($id);
@@ -280,6 +340,9 @@ class Crud {
      * @return \MyFrameWork\Crud
      */
     public function setUrlbase($url) {
+        if(!endsWith($url, "/")) {
+            $url .= '/';
+        }
         $this->urlbase = $url;
         return $this;
     }
