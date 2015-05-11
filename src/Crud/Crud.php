@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFrameWork;
+namespace MyFrameWork\Crud;
 
 use MyFrameWork\Enum\Flag;
 use MyFrameWork\Factory;
