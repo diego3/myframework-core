@@ -274,14 +274,6 @@ function removeAccents($str) {
 }
 
 /**
- * Used to debug in production mode
- * @return bool if local or not
- */
-function hostFromAlpha() {
-    return ($_SERVER["REMOTE_ADDR"] == "200.233.109.163" or $_SERVER["REMOTE_ADDR"] == "200.233.109.162");
-}
-
-/**
  * var_dump com saída formatada
  * @param mixed $var 
  */
