@@ -252,10 +252,6 @@ function redirect($url, $message='', $time=0) {
 }
 // @codeCoverageIgnoreEnd
 
-function hashit($password, $salt=UPSALT) {
-    return md5($password . $salt);
-}
-
 function debug($on=true) {
     MemoryPage::add('debug', $on);
 }
