@@ -74,12 +74,10 @@ class Factory {
         $factory = new \ReflectionClass("Application\\Page\\".$className);
         
         if($factory->implementsInterface("MyFrameWork\Event\PublisherInterface")) {
-            //require_once PATH_MYFRAME . '/src/Event/EventManager.php';
             
             return $factory->newInstance( EventManager::getInstance() );
         }
         else if($factory->implementsInterface("MyFrameWork\Event\PagePublisherInterface")) {
-            //require_once PATH_MYFRAME . '/src/Event/PageEventManager.php';
             
             return $factory->newInstance(PageEventManager::getInstance());
         }
