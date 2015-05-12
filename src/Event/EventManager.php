@@ -53,11 +53,29 @@ class EventManager {
      * @param Event $event
      */
     public function dispatch($eventName, Event $event) {
-        
-        # $listener eh um callback [ Closure, function, classe ]
-        foreach($this->listeners[$eventName] as $listener) {
-            call_user_func_array($listener/*SubscriberClass*/, array($event)/*EventParameter*/);
+        if($this->hasListeners($eventName)) {
+            # $listener eh um callback [ Closure, function, classe ]
+            foreach($this->listeners[$eventName] as $listener) {
+                call_user_func_array($listener/*SubscriberClass*/, array($event)/*EventParameter*/);
+            }
         }
+    }
+    
+    /**
+     * Verifica se há algum listener registrado antes de dispachar o evento
+     * 
+     * @param string $eventName O nome de um evento
+     * @return boolean          Retorna successo se há algum listener registrado para tal evento ou falso caso contrário
+     */
+    public function hasListeners($eventName) {
+        $has = false;
+        foreach ($this->listeners as $value) {
+            if(isset($this->listeners[$eventName])) {
+                $has = true;
+                break;
+            }
+        }
+        return $has;
     }
     
     /**
