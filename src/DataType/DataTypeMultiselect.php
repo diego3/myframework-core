@@ -18,6 +18,14 @@ use MyFrameWork\Factory;
  */
 class DataTypeMultiselect extends DataTypePK {
     
+    /**
+     * Retorna a lista de items no parâmetro
+     * @return boolean Sempre true
+     */
+    public function isExpectedToBeArray() {
+        return true;
+    }
+    
     protected function _isValid($value, $params) {
         $dao = Factory::DAO(getValueFromArray($params, Flag::DAO_NAME, ''));
         if (!is_null($dao)) {

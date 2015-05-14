@@ -18,6 +18,18 @@ abstract class Datatype {
     protected $defaultParams = array();
     
     /**
+     * Diz quando um parâmetro ao qual este tipo está associado deve ser 
+     * recebido como array ou não. Por padrão retorna false. 
+     * Mudar para true [sobrescreva esse método] 
+     * fará com que o retorno do parameter seja do tipo array.
+     * 
+     * @return boolean
+     */
+    public function isExpectedToBeArray() {
+        return false;
+    }
+    
+    /**
      * Implementa a lógica de limpeza para o tipo de dado em questão
      * @param mixed $value Valor recebido (normalmente é uma string)
      * @return mixed O valor processado
