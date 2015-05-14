@@ -248,6 +248,13 @@ abstract class Flag extends BasicEnum {
     const RENDER = 'render';
     
     /**
+     * O esquema de template que o datatype multiselect usará
+     * para gerar o componente.
+     * @example chosen, checkboxes
+     */
+    const MULTISELECT_RENDER_MODE = 'multiselect_render_mode';
+    
+    /**
      * Define se o campo será ou não visivel na tela
      * @var boolean O padrão é true
      */
