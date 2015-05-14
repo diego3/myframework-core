@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFrameWork\Commonl;
+namespace MyFrameWork\Common;
 
 use Zend\Math\Rand;
 use Zend\Crypt\Key\Derivation\Pbkdf2;
