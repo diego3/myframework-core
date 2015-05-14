@@ -335,6 +335,10 @@ abstract class ProcessRequest {
                     continue;
                 }
                 $received = filter_input(RequestType::getInternalInput($method), $itemname, FILTER_UNSAFE_RAW);
+                if(!$received) {
+                    # se é false pode ser array ?
+                    $received = filter_input_array(RequestType::getInternalInput($method), array($itemname => array('flags' => FILTER_REQUIRE_ARRAY)));
+                }
                 $log->debug('$_' . $method . '["' . $itemname . '"]: ' . var_export($received, true));                
                 $type = Factory::datatype($itemdata['type']);
                 $cleaned = $type->sanitize($received, $itemdata['params']);//faz os filtros, verifica os tipos e tals
