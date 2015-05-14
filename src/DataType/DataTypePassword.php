@@ -21,7 +21,6 @@ class DataTypePassword  extends DatatypeString {
      * @return mixed
      */
     public function valueOf($value) {
-        //@todo usar password_hash e password_verify
-        return md5($value);
+        return $value;
     }
 }

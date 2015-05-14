@@ -2,6 +2,8 @@
 namespace MyFrameWork\DataType;
 
 use MyFrameWork\DataType\Datatype;
+use MyFrameWork\Memory\MemoryPage;
+use MyFrameWork\HTML;
 
 /**
  * Represent an Html Editor component
@@ -9,7 +11,7 @@ use MyFrameWork\DataType\Datatype;
 class DatatypeHtml extends Datatype {
     
     public function getHTMLEditable($name, $value, $params, $attr=array()) {
-        MemoryPage::addCss(DOMAIN . 'static/plugin/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.css');
+        MemoryPage::addCss('static/plugin/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.css');
         MemoryPage::addJs('static/plugin/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js');
         MemoryPage::addJs('static/plugin/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.js');
         MemoryPage::addJs('static/plugin/bootstrap-wysihtml5/bootstrap-wysihtml5.pt-BR.js');        
