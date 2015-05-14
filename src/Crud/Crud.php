@@ -61,6 +61,31 @@ class Crud {
     const ACTION_URL_EDIT = 'action_url_edit';
     const ACTION_URL_DELETE = 'action_url_delete';
     
+    const INSERT_METHOD = 'insert';
+    const UPDATE_METHOD = 'update';
+    
+    /**
+     * O id processado no caso de successo ou -1 para falha
+     */
+    const SAVE_RETURN_INT = 1;
+    /**
+     * Boolean em caso de sucesso ou falha ou a mensagem de erro lançada na PDOException
+     */
+    const SAVE_RETURN_BOOL = true;
+    
+    /**
+     *
+     * o tipo de retorno do metodo save, se é bool ou int.
+     * use Crud::SAVE_RETURN_INT  para configurar o retorno para inteiro
+     * use Crud::SAVE_RETURN_BOOL para configurar o retorno para boolean 
+     */
+    const SAVE_RETURN_TYPE = 'save_return_type'; 
+    
+    /**
+     * Configuração dos parâmetros do método save
+     */
+    const SAVE_METHOD_PARAMS = 'save_method_params';
+    
     /**
      * Define a URL para salvar e editar um formulário
      * @var string
@@ -106,8 +131,9 @@ class Crud {
             //$formvalues = array_merge($result, $formvalues); 
         }
         
-        $r = ['action' => $action,
-            'class' => 'form-horizontal crud',
+        $r = [
+            'action' => $action,
+            'class'  => 'form-horizontal crud',
             'method' => 'post',
             'hidden' => [],
             'formgroup' => []
@@ -118,7 +144,7 @@ class Crud {
                     'formitem' => [
                         'id'       => $fieldname . '_id',
                         'label'    => getValueFromArray($params['params'], Flag::LABEL, ''),
-                        'item'     => Factory::datatype($params['type'])->getHTMLEditable($fieldname, getValueFromArray($formvalues, $fieldname, ''), $params['params']),
+                        'item'     => $this->getDataType($params, $fieldname, $formvalues),
                         'required' => in_array(Flag::REQUIRED, $params['params']) || getValueFromArray($params['params'], Flag::REQUIRED, false),
                         'error'    => getValueFromArray($params, 'error'),
                         'ischeckbox' => $params['type'] == 'bool'
@@ -132,43 +158,59 @@ class Crud {
         return $r;
     }
     
-    /**
-     * 
-     * @param int $id
-     * @param array $values
-     * @return int O id processado no caso de successo ou -1 para falha
-     */
-    public function save($id, $values) {
-        if (empty($id)) {
-            //INSERT
-            if ($this->dao->insert($values)) {
-                return $id;
-            }
-            return -1;
+    protected function getDataType($params, $fieldname, $formvalues) {
+        $datatype = Factory::datatype($params['type'])
+                            ->getHTMLEditable($fieldname, getValueFromArray($formvalues, $fieldname, ''), $params['params']);
+        if(null === $datatype or empty($datatype)) {
+            //tentar criar um datatype da aplicação
+            //$datatype = \Application\Model\DataType\DataTypeFactory::create($params["type"]);
+            
         }
-        else {
-            //UPDATE
-            if (!$this->dao->update($values, $id)) {
-                return -1;
-            }
-        }
-        return $id;
+        return $datatype;
     }
     
     /**
      * 
      * @param int $id        O identificador da tabela
      * @param array $values  Os valores depois do processo de limpeza e validação
-     * @return mixed         Boolean em caso de sucesso ou falha ou a mensagem de erro lançada na PDOException 
+     * @return mixed          
      */
-    public function salvar($id, $values) {
+    public function save($id, array $values) {
         if (empty($id)) {
             //INSERT
-            return $this->dao->insert($values);
+            $method = getValueFromArray($this->config, static::INSERT_METHOD, 'insert') ;
+            if($method !== 'insert') {
+                $parametros = getValueFromArray($this->config, static::SAVE_METHOD_PARAMS, array_values($values));
+                
+                //dump($parametros);
+                $retorno = call_user_func_array([ $this->dao, $method ], $parametros);
+            }
+            else if($method == 'insert') {
+                $retorno = $this->dao->{$method}($values);
+            }
         }
         else {
             //UPDATE
-            return $this->dao->update($values, $id);
+            $method = getValueFromArray($this->config, static::UPDATE_METHOD, 'update');
+            if($method !== 'update') {
+                $parametros = getValueFromArray($this->config, static::SAVE_METHOD_PARAMS, array_values($values));
+                
+                $retorno = call_user_func_array([ $this->dao, $method ], $parametros);
+            }
+            else if($method == 'update') {
+                $retorno =  $this->dao->{$method}($values, $id);
+            }
+        }
+        
+        $return_type = getValueFromArray($this->config, static::SAVE_RETURN_TYPE, true);
+        if(is_int($return_type)) {
+            if ($retorno) {
+                return $id;
+            }
+            return -1;
+        }
+        else if(is_bool($return_type)) {
+            return $retorno;
         }
     }
     
@@ -284,22 +326,21 @@ class Crud {
         return $r;
     }
     
-    
-    
     /**
      * 
-     * @param \MyFrameWork\Crud\ActionInterface $object
+     * @param \MyFrameWork\Crud\ActionInterface $action
      * @return \MyFrameWork\Crud
      */
-    public function setTableAction(\MyFrameWork\Crud\ActionInterface $object) {
-        $this->table_action = $object;
+    public function setTableAction(\MyFrameWork\Crud\ActionInterface $action) {
+        $this->table_action = $action;
         return $this;
     }
     
     /**
      * Retorna as actions que o usuário definiu para a última tabela
-     * @param Mustache_Engine $mustache  Instância do mustache
-     * @param array $row                 Linha de dados do banco de dados
+     * 
+     * @param  Mustache_Engine $mustache Instância do mustache
+     * @param  array           $row      Linha de dados do banco de dados
      * @return string                    Retorna o html da(s) action(s)
      */
     protected function getUserActions($mustache, $row) {
@@ -337,7 +378,7 @@ class Crud {
     /**
      * 
      * @param string $url
-     * @return \MyFrameWork\Crud
+     * @return \MyFrameWork\Crud\Crud
      */
     public function setUrlbase($url) {
         if(!endsWith($url, "/")) {
