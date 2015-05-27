@@ -283,3 +283,13 @@ function sysout($log_text) {
     $path = str_replace("/", "\\", PATH_LOCAL . "/sysout.log");
     file_put_contents($path, $log_text, FILE_APPEND);
 }
+
+/**
+ * 
+ * @param  string $fullyQuallifiedClassName  O nome de uma classe com o namespace completo
+ * @return string                            Retorna somente o nome da classe sem o namespace
+ */
+function getClassNameFromNamespace($fullyQuallifiedClassName) {
+    $slashExploded = explode("\\", $fullyQuallifiedClassName);
+    return $slashExploded[count($slashExploded)-1];
+}
