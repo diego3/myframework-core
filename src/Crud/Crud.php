@@ -61,8 +61,43 @@ class Crud {
     const ACTION_URL_EDIT = 'action_url_edit';
     const ACTION_URL_DELETE = 'action_url_delete';
     
+    /**
+     * Define qual método será utilizado na operação de INSERT do DAO
+     */
     const INSERT_METHOD = 'insert';
+    
+    /**
+     * Define qual método será utilizado na operação de UPDATE do DAO
+     */
     const UPDATE_METHOD = 'update';
+    
+    /**
+     * Permite adicionar mais botões no formulário de edição dos dados do crud
+     * 
+     * O value do method Crud::setConfig deve ser uma array como no exemplo
+     * 
+     * $buttons = [
+     *       "url" => 'page/action',
+     *       "class" => 'btn btn-cancel',
+     *       "label" => 'Cancelar'
+     *   ];
+     * 
+     * também pode ser uma array bi-dimensional no caso de mais de um button
+     * 
+     * $buttons = [
+     *   [
+     *       "url" => 'page/action',
+     *       "class" => 'btn btn-cancel',
+     *       "label" => 'Cancelar'
+     *   ],
+     *   [
+     *       "url" => 'page/action',
+     *       "class" => 'btn btn-success',
+     *       "label" => 'Confirmar'
+     *   ],
+     * ];
+     */
+    const EDIT_BUTTONS  = 'edit_buttons';
     
     /**
      * O id processado no caso de successo ou -1 para falha
@@ -155,6 +190,10 @@ class Crud {
                 $r['hidden'][] = ['name' => $fieldname, 'value' => getValueFromArray($formvalues, $fieldname, '')];
             }
         }
+        $buttons = getValueFromArray($this->config, static::EDIT_BUTTONS, false);
+        if($buttons) {
+            $r["buttons"] = $buttons;
+        }
         return $r;
     }
     
@@ -181,8 +220,6 @@ class Crud {
             $method = getValueFromArray($this->config, static::INSERT_METHOD, 'insert') ;
             if($method !== 'insert') {
                 $parametros = getValueFromArray($this->config, static::SAVE_METHOD_PARAMS, array_values($values));
-                
-                //dump($parametros);
                 $retorno = call_user_func_array([ $this->dao, $method ], $parametros);
             }
             else if($method == 'insert') {
@@ -194,7 +231,7 @@ class Crud {
             $method = getValueFromArray($this->config, static::UPDATE_METHOD, 'update');
             if($method !== 'update') {
                 $parametros = getValueFromArray($this->config, static::SAVE_METHOD_PARAMS, array_values($values));
-                
+                array_push($parametros, $id);
                 $retorno = call_user_func_array([ $this->dao, $method ], $parametros);
             }
             else if($method == 'update') {
