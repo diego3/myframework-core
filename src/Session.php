@@ -223,7 +223,7 @@ class Session {
      * @param string $key
      * @param string|int $value
      */
-    public function createCookie43Days($key, $value) {
+    public function createCookieFor3Days($key, $value) {
         setcookie($key, $value, (time() + (3 * 24 * 3600)));
     }
     
@@ -232,7 +232,7 @@ class Session {
      * @param string $key
      * @param string|int $value
      */
-    public function createCookie42Hours($key, $value) {
+    public function createCookieFor2Hours($key, $value) {
         setcookie($key, $value, (time() + (2 * 3600)));
     }
 }
