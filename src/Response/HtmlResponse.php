@@ -30,8 +30,9 @@ class HtmlResponse implements Response {
             }
         }
         else {
-            //TODO
-            var_dump($content);
+            //TODO o filename do page não está setado...
+            dump("[o arquivo de template não foi configurado para a página solicitada] : o filename do page não está setado");
+            dump($content);
         }
     }
 }
