@@ -28,7 +28,16 @@ class DatatypeFileimage extends Datatype {
         return empty($value);
     }
     
-    public function getHTMLEditable($name, $value, $params, $attr=array()) {
+    /**
+     * Retorna o html para renderizar o elemento na página
+     * 
+     * @param  string $name   O nome do componente
+     * @param  string $value  O caminho da imagem
+     * @param  array  $params Parâmetros utilizados com as Flag::CONSTANTES
+     * @param  array  $attr   Atributos html para o elemento
+     * @return string         Retorna o html para o elemento
+     */
+    public function getHTMLEditable($name, $value, $params, $attr = array()) {
         MemoryPage::addCss('static/css/page/filemanager.css');
         MemoryPage::addJs("js/modal-fileupload.js");
         MemoryPage::addJs("static/plugin/bootstrap-fileinput-master/js/fileinput.min.js");
@@ -36,17 +45,19 @@ class DatatypeFileimage extends Datatype {
         
         $params = $this->normalizeParams($params);
         $link = 'filemanager/index?path=' . getValueFromArray($params, Flag::MOVE_TO, 'image/') . '&header=false';
-        $linkextra = array(
-            'data-toggle' => 'modal',
-            'data-target' =>  '#myFileUpload',
+        $linkextra = [
+            'data-toggle'    => 'modal',
+            'data-target'    => '#myFileUpload',
             'data-up-action' => 'fileupload',
-            'data-hiddenid' => $name . '_id',
-            'data-imgid' => $name . '_img_id'
-        );
-        $imgattr = array(
+            'data-hiddenid'  => $name . '_id',
+            'data-imgid'     => $name . '_img_id'
+        ];
+        
+        $imgattr = [
             'class' => 'imgfile img-responsive',
-            'id' => $name . '_img_id'
-        );
+            'id'    => $name . '_img_id'
+        ];
+        
         $msg = '<small>' . getValueFromArray($params, Flag::PLACEHOLHER, '') . '</small>';
         if (empty($value)) {
             $noimg = HTML::img(

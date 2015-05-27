@@ -4,6 +4,7 @@ namespace MyFrameWork\DataType;
 use MyFrameWork\DataType\DatatypeStringBase;
 use MyFrameWork\Enum\Flag;
 use MyFrameWork\HTML;
+use MyFrameWork\Memory\MemoryPage;
 
 /**
  * O tipo de dado texto não considera espaços no início e no final do texto
@@ -33,10 +34,30 @@ class DatatypeText extends DatatypeStringBase {
     
     public function getHTMLEditable($name, $value, $params, $attr=array()) {
         $params = $this->normalizeParams($params);        
-        $attr = $this->getHTMLAttributes($attr, $params);   
+        $attr   = $this->getHTMLAttributes($attr, $params); 
+        
         if (empty($value)) {
             $value = getValueFromArray($params, Flag::DEFAULT_VALUE, '');
         }
+        
+        $maxlenght = getValueFromArray($params, Flag::MAXLENGHT, false);
+        if( $maxlenght ) {
+            MemoryPage::addJs("static/js/jquery.plugin.min.js");
+            MemoryPage::addJs("static/js/jquery.maxlength.min.js");
+            //como injetar o $("elemento").maxlength({max: $max}); ????
+        }
+        
         return HTML::textarea($name, $attr, $name . '_id', $value);
+    }
+    
+    /**
+     * 
+     * @param string $name     The name of component
+     * @param array  $configs  Settings 
+     */
+    protected function maxlengthConnect($name, array $configs = []) {
+        $s = '<script>';
+        $s .= '$("#' . $name . '_id").maxlength()';
+        $s .= '</script>';
     }
 }

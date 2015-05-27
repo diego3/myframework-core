@@ -4,6 +4,8 @@ namespace MyFrameWork\DataType;
 
 use MyFrameWork\DataType\Datatype;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\Factory;
+use MyFrameWork\HTML;
 
 /* 
  * Define o tipo de dado Enum
@@ -52,8 +54,9 @@ class DatatypeEnum extends Datatype {
         $attr = $this->getHTMLAttributes($attr, $params);
         $enum = $this->getEnum($params);
         $options = $enum->labels();
+        
         if (!getValueFromArray($params, Flag::REQUIRED, false)) {
-            array_unshift($options, '');
+            array_unshift($options, getValueFromArray($params, Flag::PLACEHOLHER, 'Escolha uma opção'));
         }
         return HTML::select($name, $options, $value, $attr, $name . '_id');
     }

@@ -166,11 +166,12 @@ abstract class Datatype {
     
     /**
      * Retorna o código HTML do elemento editável
-     * @param string $name
-     * @param string $value
-     * @param array $params
-     * @param array $attr
-     * @return string
+     * 
+     * @param  string $name   O nome do component
+     * @param  string $value  O valor que o componente exibe para o usuário
+     * @param  string $params Os parâmetros do compomente passados pela classe Flag  
+     * @param  string $attr   Atributos do html do componente
+     * @return string         Retorna todo o html formatado e pronto para ser renderizado em qualquer view
      */
     public function getHTMLEditable($name, $value, $params, $attr=array()) {
         $params = $this->normalizeParams($params);
@@ -186,9 +187,9 @@ abstract class Datatype {
     
     /**
      * 
-     * @param array $attr
-     * @param array $params
-     * @return array
+     * @param  array $attr    Atributos do html do componente
+     * @param  array $params  Os parâmetros do compomente passados pela classe Flag  
+     * @return array 
      */
     protected function getHTMLAttributes($attr, $params) {
         if (empty($attr['class'])) {

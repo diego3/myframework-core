@@ -1,11 +1,11 @@
 <?php
 namespace MyFrameWork\DataType;
 
-use MyFrameWork\DataType\Datatype;
 use Respect\Validation\Validator as v;
-use MyFrameWork\Enum\Flag;
 
-//require_once PATH_LOCAL . '/vendor/Validation/main.php';
+use MyFrameWork\DataType\Datatype;
+use MyFrameWork\Enum\Flag;
+use MyFrameWork\Factory;
 
 /* 
  * Define o tipo de dado primitivo String
