@@ -131,9 +131,10 @@ abstract class ProcessRequest {
                 $this->executeMethod($method);
             }
             else {
-                //TODO permissão negada
+                //permissão negada
                 $deniedaccess = Factory::page("DeniedacessPage");
                 $deniedaccess->service(ProcessRequest::getMethod(), "_index", ResponseType::getDefaultType());
+                exit;
             }
             $this->posProcess();
         }
@@ -155,8 +156,8 @@ abstract class ProcessRequest {
         if ($this->render && empty($this->filename)) {
             $classFCNS = strtolower(get_class($this));
             
-            $slahExploded = explode("\\", $classFCNS);
-            $this->filename = $slahExploded[count($slahExploded)-1] . $method;
+            $slashExploded = explode("\\", $classFCNS);
+            $this->filename = $slashExploded[count($slashExploded)-1] . $method;
         }
     }
     
@@ -305,14 +306,24 @@ abstract class ProcessRequest {
     /**
      * Verifica se o usuário possui permissão para acessar o método solicitado
      * Se não há regras definidas para o método, o mesmo será liberado
+     * 
      * @return boolean
      */
     protected function canAccess() {
+        if(empty($this->method)) {
+            $this->method = $this->defaultMethod;
+        }
+        if (startsWith($this->method, '_')) {
+            $this->method = substr($this->method, 1);
+        }
+        
         $allowed = getValueFromArray($this->grantsRules, $this->method, array('*'));
         $login = Session::getInstance();
+        
         if (in_array('*', $allowed)) {
             return true;
         }
+        
         return count(array_intersect($login->getGroups(), $allowed)) > 0;
     }
     
@@ -334,6 +345,7 @@ abstract class ProcessRequest {
                     $log->info('Não é possível receber o parâmetro: ' . $itemname . ' por POST/GET');
                     continue;
                 }
+                
                 $received = filter_input(RequestType::getInternalInput($method), $itemname, FILTER_UNSAFE_RAW);
                 
                 $log->debug('$_' . $method . '["' . $itemname . '"]: ' . var_export($received, true));                
