@@ -198,7 +198,8 @@ abstract class DataBase extends PDO {
             }
             return 0;
         }catch(PDOException $e) {
-            return $e->getMessage();
+            Factory::log()->info("error ao deletar : " . $e->getMessage());
+            return 0;
         }
     }
     
