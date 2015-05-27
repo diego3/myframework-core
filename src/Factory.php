@@ -287,7 +287,7 @@ class Factory {
             self::$enums[$name] = null;
             if (file_exists($fileName)) {
                 require_once($fileName);
-                $factory = new ReflectionClass($name);
+                $factory = new ReflectionClass("MyFrameWork\\Enum\\" . $name);
             }
             else if (file_exists($fileName2)) {
                 require_once($fileName2);
