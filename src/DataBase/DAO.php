@@ -10,43 +10,50 @@ use PDOException;
  */
 abstract class DAO {
     /**
-     * Conexão com o banco de dados
+     * Armazena a conexão com o banco de dados
+     * 
      * @var \MyFrameWork\DataBase\DataBase
      */
     protected $db;
     
     /**
-     * Nome da tabela
+     * Armazena o nome da tabela
+     * 
      * @var string
      */
     protected $tablename;
     
     /**
-     * Nome do campo que é chave primária na tabela
+     * Armazena o(s) nome(s) do(s) campo(s) que é/são chave(s) primária(s) na tabela
+     * 
      * @var string|array
      */
     protected $pks = 'id';
     
     /**
      * Define se a tabela possui um campo chamado "ativo" que habilita a exclusão lógica
+     * 
      * @var boolean
      */
     protected $hasactive = true;
     
     /**
-     * Lista de chaves estrangeiras
+     * Armazena a lista de chaves estrangeiras
+     * 
      * @var array O indice do vetor é o nome do campo e o valor é o nome da classe DAO referente
      */
     protected $fks;
     
     /**
-     * List of DAOS
+     * Armazena a Lista de objetos DAO
+     * 
      * @var \DAO[] array
      */
     protected $daos = array();
     
     /**
      * Cria o objeto DAO
+     * 
      * @param \MyFrameWork\DataBase\DataBase $db
      */
     public function __construct($db=null) {
@@ -66,6 +73,7 @@ abstract class DAO {
     
     /**
      * Return the database object
+     * 
      * @return \MyFrameWork\DataBase\DataBase
      */
     public function getDatabase() {
@@ -74,6 +82,7 @@ abstract class DAO {
     
     /**
      * Retorna o nome da tabela que o DAO irá controlar
+     * 
      * @return string
      */
     public function getTableName() {
@@ -82,6 +91,7 @@ abstract class DAO {
     
     /**
      * Retorna o nome do campo que é chave primária na tabela
+     * 
      * @return string
      */
     public function getPKFieldName() {
@@ -90,6 +100,7 @@ abstract class DAO {
     
     /**
      * Define se a tabela possui um campo ativo fazendo a exclusão lógica ao invés da exclusão real
+     * 
      * @return boolean
      */
     protected function hasAtivo() {
@@ -106,8 +117,9 @@ abstract class DAO {
     
     /**
      * Cria a condição where
-     * @param mixed $id Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
-     * @return array No formato WHERE
+     * 
+     * @param  mixed $id  Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
+     * @return array      Retorna array no formato WHERE
      */
     protected function createWhere($id) {
         if (is_array($this->pks)) {
@@ -129,8 +141,9 @@ abstract class DAO {
     
     /**
      * Realiza uma inserção dos dados passados em values
-     * @param array $values Array associativo atributo => valor
-     * @return int retorna 0 para falso ou > 0 para true
+     * 
+     * @param  array $values Array associativo atributo => valor
+     * @return int           Retorna 0 para falso ou > 0 para true
      */
     public function insert($values) {
         //TODO Restaurar dados se a tabela tiver campos unico e exclusão lógica estiver habilitado
@@ -139,9 +152,10 @@ abstract class DAO {
     
     /**
      * Realiza a alteração dos dados passados em values para o id
-     * @param array $values Array associativo atributo => valor
-     * @param mixed $id Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
-     * @return int retorna 0 para falso ou > 0 para true
+     * 
+     * @param  array $values Array associativo atributo => valor
+     * @param  mixed $id     Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
+     * @return int           Retorna 0 para falso ou > 0 para true
      */
     public function update($values, $id) {
         $where = $this->createWhere($id);
@@ -153,8 +167,47 @@ abstract class DAO {
     }
     
     /**
+     * Tenta inserir uma registro na tabela deste DAO.
+     * No caso de violação de chaves primárias então o algoritimo tentará dar update.
+     * 
+     * @param  array  $data    Column-value array
+     * @return mixed           Retorna o ID se for executado um insert, retorna 
+     * quantidade de linhas afetadas caso seja executado um update ou a string 
+     * com a mensagem de erro neste caso
+     */
+    public function save(array $data) {
+        debug();
+        $id = $this->insert($data);
+        if(!is_string($id) and is_int($id) and $id > 0 ) {
+            return $id;
+        }
+        else if(is_string($id)) {
+            //esse é o único caso que precisa dar update ?
+            $pos = strpos($id, 'Unique violation');
+            
+            if($pos > 0 and $pos !== false) {
+                //update
+                if(is_array($this->pks)) {
+                    foreach($this->pks as $pk) {//precisa testar este caso
+                        $pk[$pk] = $data[$pk];
+                        unset($data[$pk]);
+                    }
+                }
+                else {
+                    $pk = $data[$this->pks];
+                    unset($data[$this->pks]);
+                }
+                return $this->update($data, $pk);
+            }
+            return $id;
+        }
+        return $id;
+    }
+    
+    /**
      * Exclui um campo do banco de dados. Faz a verificação se será uma exclusão lógica ou não
-     * @param mixed $id Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
+     * 
+     * @param  mixed $id Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
      * @return int
      */
     public function delete($id) {
@@ -173,14 +226,16 @@ abstract class DAO {
                 return $this->db->delete($this->getTableName(), $this->createWhere($id));
             }
         }catch(PDOException $e) {
-            return $e->getMessage();
+            Factory::log()->info("[info]error ao deletar na camada DAO : " . $e->getMessage());
+            return 0;
         }
     }
     
     /**
      * Busca todos os dados para o respectivo ID
-     * @param mixed $id Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
-     * @param bool $deleted Determina se irá buscar por registro excluídos lógicamente
+     * 
+     * @param  mixed $id       Valor do campo ID, se for multiplo um vetor indexado pelo nome das chaves
+     * @param  bool  $deleted  Determina se irá buscar por registro excluídos lógicamente
      * @return array
      */
     public function getById($id, $deleted=false) {
@@ -193,10 +248,12 @@ abstract class DAO {
     }
     
     /**
-     * Realiza uma busca utilizando uma chave candidata diferente. Retorna sempre um único valor
-     * @param string $key
-     * @param mixed $value Valor buscado
-     * @return array
+     * Realiza uma busca utilizando uma chave candidata diferente. 
+     * Retorna SEMPRE um ÚNICO valor.
+     * 
+     * @param  string $key   O nome de uma coluna da tabela
+     * @param  mixed  $value O valor buscado/procurado
+     * @return array         Retorna uma array associativo que representa uma linha da tabela
      */
     protected function getByKey($key, $value, $deleted=false) {
         if (is_array($key) && is_array($value)) {
@@ -216,12 +273,13 @@ abstract class DAO {
     
     /**
      * Busca os dados da tabela de acordo com a condição
-     * @param mixed $campos Lista de campos que a consulta deverá retornar
-     * @param array $where Vetor com as condições
-     * @param string|array $order Campo que será utilizado na ordenação da consulta
-     * @param int $begin Indice que será inicial a busca
-     * @param int $limit Máximo de valores que deverá ser retornado
-     * @return array Resultado da consulta
+     * 
+     * @param mixed        $campos Lista de campos que a consulta deverá retornar
+     * @param array        $where  Vetor com as condições
+     * @param string|array $order  Campo que será utilizado na ordenação da consulta
+     * @param int          $begin  Indice que será inicial a busca
+     * @param int          $limit  Máximo de valores que deverá ser retornado
+     * @return array               Resultado da consulta
      */
     public function listByCondition($campos, $where, $order=array(), $begin=0, $limit=100) {
         return $this->_listByCondition($this->getTableName(), $campos, $where, $order, $begin, $limit);
@@ -229,13 +287,14 @@ abstract class DAO {
     
     /**
      * Busca os dados da tabela de acordo com a condição
-     * @param string $table O nome de uma tabela ou uma lista de tabelas
-     * @param mixed $campos Lista de campos que a consulta deverá retornar
-     * @param array $where Vetor com as condições
-     * @param string|array $order Campo que será utilizado na ordenação da consulta
-     * @param int $begin Indice que será inicial a busca
-     * @param int $limit Máximo de valores que deverá ser retornado
-     * @return array Resultado da consulta
+     * 
+     * @param string        $table O nome de uma tabela ou uma lista de tabelas
+     * @param mixed         $campos Lista de campos que a consulta deverá retornar
+     * @param array         $where Vetor com as condições
+     * @param string|array  $order Campo que será utilizado na ordenação da consulta
+     * @param int           $begin Indice que será inicial a busca
+     * @param int           $limit Máximo de valores que deverá ser retornado
+     * @return array        Retorna o resultado da consulta
      */
     protected function _listByCondition($table, $campos, $where, $order=array(), $begin=0, $limit=100) {
         $extra = array('orderBy' => $order, 'limit' => $limit, 'offset' => $begin);
@@ -246,11 +305,12 @@ abstract class DAO {
     }
     
     /**
-     * Busca todos os dados da tabela
-     * @param string|array $order Campo que será utilizado na ordenação da consulta
-     * @param int $begin Indice que será inicial a busca
-     * @param int $limit Máximo de valores que deverá ser retornado
-     * @return array Resultado da consulta
+     * Busca todos os dados da tabela retornando TODAS as linhas correspondentes
+     * 
+     * @param  string|array $order  Campo que será utilizado na ordenação da consulta
+     * @param  int          $begin  Indice que será inicial a busca
+     * @param  int          $limit  Máximo de valores que deverá ser retornado
+     * @return array                Retorna o resultado da consulta
      */
     public function listAll($order=array(), $begin=0, $limit=100) {
         return $this->listByCondition('*', array(), $order, $begin, $limit);
@@ -258,11 +318,12 @@ abstract class DAO {
     
     /**
      * Retorna os dados indexados pela chave primária. Se a chave primária é composta a chave será concatenada
-     * @param mixed $campos Um único campo ou uma lista de campos
-     * @param string|array $order Campo que será utilizado na ordenação da consulta
-     * @param int $begin Indice que será inicial a busca
-     * @param int $limit Máximo de valores que deverá ser retornado
-     * @return array Resultado da consulta
+     * 
+     * @param mixed        $campos  Um único campo ou uma lista de campos
+     * @param string|array $order   Campo que será utilizado na ordenação da consulta
+     * @param int          $begin   Indice que será inicial a busca
+     * @param int          $limit   Máximo de valores que deverá ser retornado
+     * @return array                Resultado da consulta
      */
     public function getIndexedArray($campos='*', $where=array(), $order=array(), $begin=0, $limit=100) {
         return $this->_getIndexedArray($this->getTableName(), $this->getPKFieldName(), $campos, $where, $order, $begin, $limit);
@@ -270,6 +331,7 @@ abstract class DAO {
     
     /**
      * Retorna o ultimo id serial
+     * 
      * @return int
      */
     public function getLastId() {
@@ -278,12 +340,13 @@ abstract class DAO {
     
     /**
      * Retorna os dados indexados pela chave primária. Se a chave primária é composta a chave será concatenada
-     * @param string $table O nome de uma tabela ou uma lista de tabelas
-     * @param mixed $campos Um único campo ou uma lista de campos
-     * @param string|array $order Campo que será utilizado na ordenação da consulta
-     * @param int $begin Indice que será inicial a busca
-     * @param int $limit Máximo de valores que deverá ser retornado
-     * @return array Resultado da consulta
+     * 
+     * @param  string        $table   O nome de uma tabela ou uma lista de tabelas
+     * @param  mixed         $campos  Um único campo ou uma lista de campos
+     * @param  string|array  $order   Campo que será utilizado na ordenação da consulta
+     * @param  int           $begin   Indice que será inicial a busca
+     * @param  int           $limit   Máximo de valores que deverá ser retornado
+     * @return array                  Resultado da consulta
      */
     protected function _getIndexedArray($table, $pks, $campos='*', $where=array(), $order=array(), $begin=0, $limit=100) {
         if (!is_array($campos)) {
@@ -321,9 +384,9 @@ abstract class DAO {
      * Função genérica que retorna o ID de um campo. 
      * Funciona apenas para tabelas com chave primária inteiro e única
      *
-     * @param string $campo Nome do campo 
-     * @param string|id $valor Id ou valor do $campo que deve ser um campo da tabela
-     * @return int Valor do Id ou -1 caso não encontre o campo
+     * @param string    $campo  Nome do campo 
+     * @param string|id $valor  Id ou valor do $campo que deve ser um campo da tabela
+     * @return int              Valor do Id ou -1 caso não encontre o campo
      */
     protected function getTableId($campo, $valor) {
         if (is_numeric($valor)) {
@@ -342,6 +405,7 @@ abstract class DAO {
     
     /**
      * Carrega um DAO único
+     * 
      * @param string $dao Nome do DAO
      */
     protected function loadDAO($dao) {

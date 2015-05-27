@@ -9,7 +9,6 @@ use PDO;
 /* 
  * Classe de banco genérica que herda de PDO
  */
-
 abstract class DataBase extends PDO {
     
     /**
@@ -31,19 +30,28 @@ abstract class DataBase extends PDO {
     
     /**
      * Retorna o objeto query para o banco de dados
+     * 
      * @return MyFrameWork\DataBase\Query
      */
     public abstract function getQuery();
     
     /**
-     * Cria a conexão com o banco de dados
+     * Cria a conexão com o banco de dados.
+     * Os erros são logados no diretório configurado no log4php.
+     * 
+     * @param string $host      O ip ou a url onde o banco de dados se encontra hospedado
+     * @param string $dbname    O nome da base de dados a ser utilizada
+     * @param string $user      O nome de usuário 
+     * @param string $password  A senha do usuário
+     * @param int    $port      A porta na qual o banco de dados está configurado
      */
     public function __construct($host, $dbname, $user, $password, $port=null) {
-        $this->host = $host;
+        $this->host   = $host;
         $this->dbname = $dbname;
-        $this->user = $user;
-        $this->pass = $password;
-        $this->port = $port;
+        $this->user   = $user;
+        $this->pass   = $password;
+        $this->port   = $port;
+        
         try {
             parent::__construct($this->getDsn(), $this->user, $this->pass, array());
             $this->setAttribute(self::ATTR_ERRMODE, self::ERRMODE_EXCEPTION);
@@ -56,9 +64,10 @@ abstract class DataBase extends PDO {
     
     /**
      * Prepara e executa uma query no banco de dados
-     * @param string $sql Comando Sql
-     * @param array $params Parametros a serem ligados
-     * @return int retorna 0 para falso ou o número de linhas afetadas
+     * 
+     * @param  string $sql    Comando Select em forma de string
+     * @param  array  $params Parametros a serem ligados
+     * @return int            Retorna 0 para falso ou o número de linhas afetadas
      */
     public function execute($sql, $params=array()) {
         try {
@@ -72,7 +81,7 @@ abstract class DataBase extends PDO {
             }
         } catch (PDOException $e) {
             Factory::log()->info($e->getMessage());
-            Factory::log()->fatal("[".date('H:m:i')."]Falha ao executar uma query\nerror: {$e->getMessage()}", $e);
+            Factory::log()->fatal("[".date('H:i:s')."]Falha ao executar uma query\nerror: {$e->getMessage()}", $e);
             return $e->getMessage();
         }
         return 0;
@@ -80,7 +89,8 @@ abstract class DataBase extends PDO {
     
     /**
      * Realiza uma consulta no banco e retorna todos os dados encontrados
-     * @param string $sql
+     * 
+     * @param  string $sql Comando Select em forma de string
      * @return array
      */
     public function fetchAll($sql, $params=array()) {
@@ -94,8 +104,9 @@ abstract class DataBase extends PDO {
     
     /**
      * Retorna uma única linha da consulta ou o próximo resultado
-     * @param string $sql Comando Select em forma de string
-     * @param array $params Parametros a serem ligados
+     * 
+     * @param  string $sql    Comando Select em forma de string
+     * @param  array  $params Parametros a serem ligados
      * @return array
      */
     public function fetch($sql=null, $params=array()) {
@@ -117,8 +128,9 @@ abstract class DataBase extends PDO {
     
     /**
      * Retorna um único valor para uma consulta
-     * @param string $sql
-     * @param array $params
+     * 
+     * @param  string $sql    Comando Select em forma de string
+     * @param  array  $params array indexado com os valores dos parâmetros que serão ligados na consulta
      * @return mixed
      */
     public function fetchField($sql=null, $params=array()) {
@@ -141,6 +153,7 @@ abstract class DataBase extends PDO {
      * Retorna a quantidade de linhas afetadas pelo ultimo DELETE, INSERT ou UPDATE.
      * Se o ultimo comando foi um SELECT alguns bancos retornam o numero de linhas da consulta,
      * porem este comportamento não é garatido por todos os bancos de dados.
+     * 
      * @return int
      */
     public function rowCount(){
@@ -149,10 +162,13 @@ abstract class DataBase extends PDO {
     
     /**
      * Realiza uma inserção no banco de dados
+     * 
      * @param string $table Nome da tabela
-     * @param array $attrs Array associativo mapeando chave => valor, para atributo => valor
-     * @example
-     *   $db->insert("tabela1", ['campo1' => 'valor1', 'campo2' => 'valor2']);
+     * @param array  $attrs Array associativo mapeando chave => valor, para atributo => valor
+     * 
+     *    example
+     *    $db->insert("tabela1", ['campo1' => 'valor1', 'campo2' => 'valor2']);
+     * 
      * @return int
      */
     public function insert($table, $attrs) {
@@ -166,12 +182,15 @@ abstract class DataBase extends PDO {
     /**
      * Realiza um update no banco de dados
      * Se não houver uma condição WHERE por segurança não será executado o comando
-     * @param string $table
-     * @param array $attrs Array associativo mapeando chave => valor, para atributo => valor
-     * @param mixed $where Array associativo no formato wherearray ou um objeto Where
-     * @example
+     * 
+     * @param string $table O nome da tabela
+     * @param array  $attrs Array associativo mapeando chave => valor, para atributo => valor
+     * @param mixed  $where Array associativo no formato wherearray ou um objeto Where
+     * 
+     *   example
      *   $db->update("tabela1", ['campo1' => 1, 'campo2' => 2], ['id' => 33])
-     * @return int retorna 0 para falso ou > 0 para true   
+     * 
+     * @return int         retorna 0 para falso ou > 0 para true   
      */
     public function update($table, $attrs, $where) {
         $ret = $this->getQuery()->update($table, $attrs, $where);
@@ -184,11 +203,14 @@ abstract class DataBase extends PDO {
     /**
      * Realiza um delete no banco de dados
      * Se não houver uma condição WHERE por segurança não será executado o comando
-     * @param string $table
-     * @param mixed $where Array associativo no formato wherearray ou um objeto Where
-     * @example
+     * 
+     * @param string $table O nome da tabela
+     * @param mixed  $where Array associativo no formato wherearray ou um objeto Where
+     * 
+     *   example
      *   $db->delete("tabela1", ['id' => 33])
-     * @return boolean    
+     * 
+     * @return mixed        Retorna 0 em caso de falha e boolean em caso de sucesso    
      */
     public function delete($table, $where) {
         try{
@@ -198,20 +220,23 @@ abstract class DataBase extends PDO {
             }
             return 0;
         }catch(PDOException $e) {
-            Factory::log()->info("error ao deletar : " . $e->getMessage());
+            Factory::log()->info("[info]error ao deletar na camada DataBase: " . $e->getMessage());
             return 0;
         }
     }
     
     /**
-     * Realiza uma consulta SQL no banco de dados
-     * @param array $columns Vetor com as colunas utilizadas na consulta
-     * @param string $table Nome da tabela
-     * @param mixed $where Array associativo no formato wherearray, um objeto Where ou uma string
-     * @param mixed $extra Array ou Expression Se $where for uma string $extra será considerado parâmetros
-     * @example
+     * Realiza uma consulta SQL no banco de dados trazendo todas as linhas da tabela
+     * 
+     * @param array  $columns Vetor com as colunas utilizadas na consulta
+     * @param string $table   Nome da tabela
+     * @param mixed  $where   Array associativo no formato wherearray, um objeto Where ou uma string
+     * @param mixed  $extra   Array ou Expression Se $where for uma string $extra será considerado parâmetros
+     * 
+     *   example
      *   $db->select('*', "tabela1", ['id' => 33])
-     * @return array()    
+     * 
+     * @return array    
      */
     public function select($columns, $table, $where=array(), $extra=array()) {
         $ret = $this->getQuery()->select($columns, $table, $where, $extra);
@@ -222,14 +247,17 @@ abstract class DataBase extends PDO {
     }
     
     /**
-     * Realiza uma consulta SQL no banco de dados
-     * @param array $columns Vetor com as colunas utilizadas na consulta
-     * @param string $table Nome da tabela
-     * @param mixed $where Array associativo no formato wherearray, um objeto Where ou uma string
-     * @param mixed $extra Array ou Expression Se $where for uma string $extra será considerado parâmetros
-     * @example
+     * Realiza uma consulta SQL no banco de dados retornando somente UMA linha da tabela
+     * 
+     * @param array  $columns  Vetor com as colunas utilizadas na consulta
+     * @param string $table    Nome da tabela
+     * @param mixed  $where    Array associativo no formato wherearray, um objeto Where ou uma string
+     * @param mixed  $extra    Array ou Expression Se $where for uma string $extra será considerado parâmetros
+     * 
+     *   example
      *   $db->selectOne('*', "tabela1", ['id' => 33])
-     * @return array()    
+     * 
+     * @return array  
      */
     public function selectOne($columns, $table, $where=array(), $extra=array()) {
         if (!is_string($where)) {
@@ -255,7 +283,12 @@ abstract class DataBase extends PDO {
         return $this->statement;
     }
     
-    
+    /**
+     * Exibe informações referente aos parâmetros utilizados na conexão com o banco de dados
+     * 
+     * @readonly
+     * @return string  
+     */
     public function toString(){
         return 'Database ' . get_class($this) . '\n' .
                   'Pass ' . $this->pass . '\n' .
