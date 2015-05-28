@@ -176,7 +176,6 @@ abstract class DAO {
      * com a mensagem de erro neste caso
      */
     public function save(array $data) {
-        debug();
         $id = $this->insert($data);
         if(!is_string($id) and is_int($id) and $id > 0 ) {
             return $id;
@@ -186,17 +185,18 @@ abstract class DAO {
             $pos = strpos($id, 'Unique violation');
             
             if($pos > 0 and $pos !== false) {
-                //update
+                //remove as pks do array de dados para evitar conflito no comando sql
                 if(is_array($this->pks)) {
-                    foreach($this->pks as $pk) {//precisa testar este caso
-                        $pk[$pk] = $data[$pk];
-                        unset($data[$pk]);
+                    foreach($this->pks as $pkey) {
+                        $pk[$pkey] = $data[$pkey];
+                        unset($data[$pkey]);
                     }
                 }
                 else {
                     $pk = $data[$this->pks];
                     unset($data[$this->pks]);
                 }
+                //update
                 return $this->update($data, $pk);
             }
             return $id;
