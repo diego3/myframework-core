@@ -53,20 +53,32 @@ class DatatypeFileimage extends Datatype {
             'data-imgid'     => $name . '_img_id'
         ];
         
+        $linkextra = array_merge($linkextra, $attr);
+        
         $imgattr = [
             'class' => 'imgfile img-responsive',
             'id'    => $name . '_img_id'
         ];
         
+        $hasOrdenator = getValueFromArray($params, Flag::FILEIMAGE_HAS_ORDENATOR, false);
+        
         $msg = '<small>' . getValueFromArray($params, Flag::PLACEHOLHER, '') . '</small>';
+        
         if (empty($value)) {
-            $noimg = HTML::img(
-                'image/icons/img-icon.png', 'Nenhuma imagem selecionada', $imgattr);
-            $img = HTML::link($link, $noimg . 'Adicionar imagem', 'Adicionar imagem', $linkextra);
+            $noimg = HTML::img('image/icons/img-icon.png', 'Nenhuma imagem selecionada', $imgattr);
+            $img   = HTML::link($link, $noimg . 'Adicionar imagem', 'Adicionar imagem', $linkextra);
+            if($hasOrdenator) {
+                $ordem = $linkextra["data-ordem"];
+                $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
+            }
         }
         else {
-            $img = HTML::img($value, 'Imagem selecionada', $imgattr);
+            $img  = HTML::img($value, 'Imagem selecionada', $imgattr);
             $img .= HTML::link($link, 'Alterar imagem', 'Trocar a imagem', $linkextra);
+            if($hasOrdenator) {
+                $ordem = $linkextra["data-ordem"];
+                $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
+            }
         }
         return $msg . $img . HTML::input($name, array('value' => $value), $name . '_id', 'hidden');
     }

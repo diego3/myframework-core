@@ -277,5 +277,11 @@ abstract class Flag extends BasicEnum {
      * @var string
      */
     const URL = "url";
+    
+    /**
+     * Define se o Fileimage vai renderizar os labels de ordenação para cada imagem
+     * @var boolean  valores true ou false, o padrão é false portanto desativado por default
+     */
+    const FILEIMAGE_HAS_ORDENATOR = 'fileimage_has_ordenator';
 }
 
