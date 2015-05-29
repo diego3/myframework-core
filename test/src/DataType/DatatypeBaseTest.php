@@ -1,5 +1,4 @@
 <?php
-require_once '/datatype/datatype.php';
 
 class DatatypeBaseTest extends PHPUnit_Framework_TestCase {
     /**
