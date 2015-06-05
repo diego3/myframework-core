@@ -15,15 +15,20 @@ use MyFrameWork\Event\EventManager;
 abstract class ProcessRequestObserver extends ProcessRequest implements PublisherInterface, SubscriberInterface {
     /**
      *
-     * @var EventManager 
+     * @var \MyFrameWork\Event\EventManager 
      */
     protected $em;
     
-    public function __construct(EventManager $em) {
+    public function setEventManager(EventManager $em) {
         $this->em = $em;
         $this->em->addSubscriber($this);
+        return $this;
     }
     
+    /**
+     * 
+     * @return \MyFrameWork\Event\EventManager 
+     */
     public function getDispatcher() {
         return $this->em;
     }
@@ -31,7 +36,7 @@ abstract class ProcessRequestObserver extends ProcessRequest implements Publishe
     //@todo esta ouvindo a si mesmo, e se outro page tambem quiser se registrar ?
     public function getSubscribedEvents() {
         return [
-            //"ConstanteEvent" => "callbackMethod"
+            //"ConstantEventName" => "callbackMethod"
         ];
     }
     
