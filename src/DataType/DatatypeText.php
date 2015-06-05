@@ -44,7 +44,9 @@ class DatatypeText extends DatatypeStringBase {
         if( $maxlenght ) {
             MemoryPage::addJs("static/js/jquery.plugin.min.js");
             MemoryPage::addJs("static/js/jquery.maxlength.min.js");
+            MemoryPage::addJs("static/js/jquery.autosize.min.js");
             //como injetar o $("elemento").maxlength({max: $max}); ????
+            $attr = array_merge($attr, ["data-limite-caracteres" => $maxlenght]);
         }
         
         return HTML::textarea($name, $attr, $name . '_id', $value);
