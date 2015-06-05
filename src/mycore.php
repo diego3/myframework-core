@@ -146,7 +146,8 @@ function isValidEmail($email, $checkDNS = false) {
     );
 
     if ($valid) {
-        if ($checkDNS && ($domain = end(explode('@',$email, 2)))) {
+        $domain = explode('@',$email)[1];
+        if ($checkDNS && $domain) {
             /*
             Note:
             Adding the dot enforces the root.
