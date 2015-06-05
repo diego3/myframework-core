@@ -74,8 +74,10 @@ class Factory {
         $factory = new \ReflectionClass("Application\\Page\\".$className);
         
         if($factory->implementsInterface("MyFrameWork\Event\PublisherInterface")) {
-            
-            return $factory->newInstance( EventManager::getInstance() );
+            $instance = $factory->newInstance();
+            $method   = $factory->getMethod("setEventManager");
+            $method->invoke($instance, EventManager::getInstance());
+            return $instance;
         }
         else if($factory->implementsInterface("MyFrameWork\Event\PagePublisherInterface")) {
             
@@ -195,7 +197,14 @@ class Factory {
                 return null;
             }
             $factory = new ReflectionClass("Application\\Model\\Dao\\" . $className);
-            if ($factory->isSubclassOf('MyFrameWork\\DataBase\\DAO') && !$factory->isAbstract()) {
+            
+            if($factory->isSubclassOf('MyFrameWork\\DataBase\\DAO') and $factory->implementsInterface("MyFrameWork\Event\PublisherInterface")) {
+                $instance = $factory->newInstance($db);
+                $method   = $factory->getMethod("setEventManager");
+                $method->invoke($instance, EventManager::getInstance());
+                return $instance;
+            }
+            else if ($factory->isSubclassOf('MyFrameWork\\DataBase\\DAO') && !$factory->isAbstract()) {
                 self::$daos[$daokey] = $factory->newInstance($db);
             }
             else {

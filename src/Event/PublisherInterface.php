@@ -8,11 +8,18 @@ namespace MyFrameWork\Event;
  */
 interface PublisherInterface {
     
-    public function __construct(EventManager $em);
+    /**
+     * Armazena o EventManager. 
+     * 
+     * @param \MyFrameWork\Event\EventManager $em
+     */
+    public function setEventManager(EventManager $em);
+    
     
     /**
+     * Retorna o EventManager
      * 
-     * @return EventManager2
+     * @return \MyFrameWork\Event\EventManager 
      */
     public function getDispatcher();
 }
