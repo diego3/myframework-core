@@ -146,9 +146,16 @@ abstract class DAO {
      * @return int           Retorna 0 para falso ou > 0 para true
      */
     public function insert($values) {
+        $this->preInsert($values);
         //TODO Restaurar dados se a tabela tiver campos unico e exclusão lógica estiver habilitado
         return $this->db->insert($this->getTableName(), $values);
     }
+    
+    /**
+     * 
+     * @param array $values
+     */
+    public function preInsert($values) {}
     
     /**
      * Realiza a alteração dos dados passados em values para o id
@@ -158,6 +165,8 @@ abstract class DAO {
      * @return int           Retorna 0 para falso ou > 0 para true
      */
     public function update($values, $id) {
+        $this->preUpdate($values, $id);
+        
         $where = $this->createWhere($id);
         if (empty($where)) {
             Factory::log()->warn('O campo informado para alteração é inválido');
@@ -165,6 +174,13 @@ abstract class DAO {
         }
         return $this->db->update($this->getTableName(), $values, $where);
     }
+    
+    /**
+     * 
+     * @param array $values
+     * @param int $id
+     */
+    public function preUpdate($values, $id) {}
     
     /**
      * Tenta inserir uma registro na tabela deste DAO.
