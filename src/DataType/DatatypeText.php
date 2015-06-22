@@ -42,8 +42,8 @@ class DatatypeText extends DatatypeStringBase {
         
         $maxlenght = getValueFromArray($params, Flag::MAXLENGHT, false);
         if( $maxlenght ) {
-            MemoryPage::addJs("static/js/bootstrap-maxlength.min.js");
-            MemoryPage::addJs("static/js/jquery.autosize.min.js");
+            MemoryPage::addJs("static/js/bootstrap-maxlength.js");
+            MemoryPage::addJs("static/js/autosize.v3.js");
             
             $extra = [
                 "maxlength" => $maxlenght,
