@@ -176,6 +176,20 @@ class Session {
     }
     
     /**
+     *  Retorna um valor que está na sessão e não é protegido.
+     *  Depois de retornado o value é removido da sessão.
+     * 
+     * @param  string $key   
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function getDataAndRemove($key, $default=null)  {
+        $value = $this->getData($key, $default);
+        $this->removeData($key);
+        return $value;
+    }
+    
+    /**
      * Limpa um valor da sessão
      * @param string $key
      */
