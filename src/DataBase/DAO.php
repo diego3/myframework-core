@@ -92,7 +92,7 @@ abstract class DAO {
     /**
      * Retorna o nome do campo que é chave primária na tabela
      * 
-     * @return string
+     * @return string|array
      */
     public function getPKFieldName() {
         return $this->pks;

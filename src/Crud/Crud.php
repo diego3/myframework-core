@@ -49,6 +49,16 @@ class Crud {
     const BROWSE_TABLE = 1;
     
     /**
+     * Mode render baseado em icones lado a lado
+     */
+    const LADO_A_LADO  = 2;
+    
+    /**
+     * Flag utilizada para configurar o modo de renderizar os dados
+     */
+    const RENDER_MODE = 'render_mode';
+    
+    /**
      * Exibe ou não a última coluna da tabela (exibe as ações dinamicamente)
      * @var boolean
      */
@@ -148,9 +158,9 @@ class Crud {
     
     /**
      * 
-     * @param int $id
-     * @param array $formdata As informações fornecidas pelo addParameter
-     * @param array $formvalues Valores de todos os campos do formulário já validados
+     * @param  int   $id
+     * @param  array $formdata   As informações fornecidas pelo addParameter
+     * @param  array $formvalues Valores de todos os campos do formulário já validados
      * @return array
      */
     public function edit($id, $formdata, $formvalues) {
@@ -173,6 +183,7 @@ class Crud {
             'hidden' => [],
             'formgroup' => []
         ];
+        
         foreach ($formdata as $fieldname => $params) {            
             if (getValueFromArray($params['params'], Flag::VISIBLE, true)) {
                 $r['formgroup'][] = [
@@ -190,6 +201,7 @@ class Crud {
                 $r['hidden'][] = ['name' => $fieldname, 'value' => getValueFromArray($formvalues, $fieldname, '')];
             }
         }
+        
         $buttons = getValueFromArray($this->config, static::EDIT_BUTTONS, false);
         if($buttons) {
             $r["buttons"] = $buttons;
@@ -267,6 +279,7 @@ class Crud {
     
     /**
      * Define uma configuração específica para o CRUD
+     * 
      * @param Crud::CONST $param   Use sempre as constantes
      * @param mixed $value         O valor da configuração
      * @return \MyFrameWork\Crud
@@ -277,6 +290,17 @@ class Crud {
     }
     
     /**
+     * Recupera o array de configurações do crud
+     * 
+     * @return array
+     */
+    public function getConfig() {
+        return $this->config;
+    }
+    
+    /**
+     * Monta um componente para exibir os dado. Esse componente eh baseado
+     * em um modo de renderização passado em parâmetro.
      * 
      * @param string $title  Um simples título
      * @param array $schema  O esquema utilizado na renderização da view
@@ -290,11 +314,17 @@ class Crud {
         else {
             $dados = $this->dados = $this->dao->listAll(getValueFromArray($this->config, Crud::ORDER_BY, array()));
         }
+        
+        //definido o modo render para a listagem dos dados
         $pagedata = [];
         switch($mode) {
+            case self::LADO_A_LADO :
+                $pagedata['ladoalado'] = $this->getLadoALado($dados, $schema);
+                break;
             default:
                 $pagedata['tabledata'] = $this->getTable($dados, $schema);
         }
+        
         $pagedata['title'] = 'Lista de ' . ucfirst(str_replace("/", "",$title)) . "s" ;
         $pagedata['breadcrumb'] = ['items' => 
             [
@@ -313,6 +343,76 @@ class Crud {
     }
     
     /**
+     * Configura os dados para o modo render com icones lado a lado
+     * 
+     * @param  array  $dados
+     * @param  array  $schema
+     * @return string
+     */
+    public function getLadoALado($dados, $schema) {
+        $pagedata = [];
+        
+        $action = getValueFromArray($this->config, Crud::SHOW_TABLE_ACTIONS, true);
+        
+        if ($action) {
+            //@todo refatorar  #init
+            $dao_pks = $this->dao->getPKFieldName();
+            if(is_string($dao_pks)) {
+                $pk = $dao_pks;
+            }
+            else if (is_array($dao_pks)) {
+                $pk = isset($dao_pks[0]) ? $dao_pks[0] : "no-primary-key-setted";
+            }
+            else {
+                $pk = "id";//daoname_id
+            }
+            
+            $default_edit_url   = str_replace('<id>', $pk, $this->urlbase . 'edit/{{<id>}}');
+            $default_delete_url = str_replace('<id>', $pk, $this->urlbase . 'delete/{{<id>}}');
+            
+            $urledit   = getValueFromArray($this->config, Crud::ACTION_URL_EDIT,   $default_edit_url  );
+            $urldelete = getValueFromArray($this->config, Crud::ACTION_URL_DELETE, $default_delete_url);
+            # refatorar end
+        }
+        
+        $m = Template::singleton();
+        
+        foreach($dados as $row) {
+            $item = [];
+            foreach($schema as $key => $template) {
+                $item[$key] = $m->renderHTML($template, $row);
+            }
+            
+            if ($action) {
+                $actions = HTML::link(
+                    $m->renderHTML($urledit, $row),
+                    '<span class="glyphicon glyphicon-pencil"></span> Editar',
+                    'Editar este item',
+                    ['class' => 'btn btn-default ']
+                );
+                
+                $actions .= ' ' . $this->getUserActions($m, $row);
+
+                $actions .= ' ' . HTML::link(
+                    $m->renderHTML($urldelete, $row),
+                    '<span class="glyphicon glyphicon-trash"></span> Deletar',
+                    'Excluir este item',
+                    ['class' => 'btn btn-danger ']
+                );
+                
+                $item["actions"] = $actions;
+            }
+            
+            $pagedata["item"][] = $item;
+        }
+        
+        return $pagedata;
+    }
+    
+       
+    
+    /**
+     * Configura os dados para o modo render em tabela
      * 
      * @param array $dados
      * @param array $schema
@@ -323,16 +423,35 @@ class Crud {
         $action = getValueFromArray($this->config, Crud::SHOW_TABLE_ACTIONS, true);
         
         if ($action) {
-            $thead[] = 'Ações';
-            $urledit = getValueFromArray($this->config, Crud::ACTION_URL_EDIT, $this->urlbase . 'edit/{{id}}');
-            $urldelete = getValueFromArray($this->config, Crud::ACTION_URL_DELETE, $this->urlbase . 'delete/{{id}}');
+            $thead[]   = 'Ações';
+            
+            #@todo refatorar init
+            $dao_pks = $this->dao->getPKFieldName();
+            if(is_string($dao_pks)) {
+                $pk = $dao_pks;
+            }
+            else if (is_array($dao_pks)) {
+                $pk = isset($dao_pks[0]) ? $dao_pks[0] : "no-primary-key-setted";
+            }
+            else {
+                $pk = "id";//daoname_id
+            }
+            
+            $default_edit_url   = str_replace('<id>', $pk, $this->urlbase . 'edit/{{<id>}}');
+            $default_delete_url = str_replace('<id>', $pk, $this->urlbase . 'delete/{{<id>}}');
+            
+            $urledit   = getValueFromArray($this->config, Crud::ACTION_URL_EDIT,   $default_edit_url  );
+            $urldelete = getValueFromArray($this->config, Crud::ACTION_URL_DELETE, $default_delete_url);
+            #refatorar end
         }
+        
         $r = [
             'tfoot' => count($dados) . ' registro(s)',
             'thead' => $thead,
             'tbody' => [],
             'class' => 'table-striped table-hover table-bordered browsetable'
         ];
+        
         $t = Template::singleton();
         foreach ($dados as $row) {
             $td = [];
