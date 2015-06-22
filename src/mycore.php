@@ -2,6 +2,8 @@
 
 use MyFrameWork\Memory\MemoryPage;
 use MyFrameWork\Memory\Memory;
+use MyFrameWork\Factory;
+
 /* 
  * Utilities functions to use in PHP
  */
@@ -293,4 +295,53 @@ function sysout($log_text) {
 function getClassNameFromNamespace($fullyQuallifiedClassName) {
     $slashExploded = explode("\\", $fullyQuallifiedClassName);
     return $slashExploded[count($slashExploded)-1];
+}
+
+/**
+ * 
+ * @param string $application_config   O caminho para o arquivo de configuração
+ * @return mixed                       Retorna array em sucesso ou null em caso de falhas. Em casos de falhas é logado os detalhes em temp/log
+ */
+function getConfig($application_config) {
+    $dist  = $application_config . ".dist";
+    $isDev = strpos($application_config, "local");
+    if($isDev === false) {
+        $isDev = false;
+    }
+    
+    if(!file_exists($application_config)) {    
+        if(file_exists($dist)) {
+            $data = file_get_contents($dist);
+            //se o arquivo não existe então o mesmo é criado
+            $putted = file_put_contents($application_config, $data);
+            if(false === $putted) {
+                Factory::log()->fatal(" não foi possível criar arquivo de configuração : " . $application_config);
+                return null;
+            }
+            
+            //removendo o arquivo de distribuição caso seja ambiente de produção
+            if(!$isDev) {
+                $wasDeleted = unlink($dist);
+                if(!$wasDeleted) {
+                    unlink(realpath($dist));
+                }
+            }
+            
+            $parsedConfigs = parse_ini_file($application_config, true);
+            if(!$parsedConfigs) {
+                Factory::log()->fatal(" não foi possivel fazer o parse do arquivo de configuração :  " . $application_config);
+                return null;
+            }
+            return $parsedConfigs;
+        }
+        Factory::log()->fatal(" não existe nenhum arquivo de configuração :  " . $application_config);
+        return null;
+    }
+    
+    $parsedConfigs = parse_ini_file($application_config, true);
+    if(!$parsedConfigs) {
+        Factory::log()->fatal(" não foi  possivel fazer o parse do arquivo de configuração :  " . $application_config);
+        return null;
+    }
+    return $parsedConfigs;
 }
