@@ -102,13 +102,120 @@ abstract class ProcessRequest {
      */
     protected function posProcess() {}
     
+    
+    /**
+     * Seta o identificador único
+     * @param int $id
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
+    
+    /**
+     * Configura o arquivo template(.mustache)
+     * @param string $templateName
+     */
+    public function setTemplateFile($templateName){
+        $this->filename = $templateName;
+    }
+    
+    /**
+     * Método main implementado por padrão
+     * @return boolean
+     */
+    protected function _main() {
+        return true;
+    }
+    
+    /**
+     * Retorna o nome do arquivo de template
+     * @return type
+     */
+    protected function getFilename() {
+        return $this->filename;
+    }
+    
+    /**
+     * Exibe a mensagem de erro
+     * @param Error $erro
+     */
+    public function setError(Error $erro) {
+        //TODO
+    }
+    
+    /**
+     * Retorna o nome da URL chamada
+     */
+    protected function getPageName() {
+        return $_GET['_page'];
+    }
+    
+    /**
+     * Verifica se é uma requisição GET
+     * @return boolean
+     */
+    public static final function isGETRequest() {
+        return self::$requestType == 'GET';
+    }
+    
+    /**
+     * Verifica se é uma requisição POST
+     * @return boolean
+     */
+    public static final function isPOSTRequest() {
+        return self::$requestType == 'POST';
+    }
+    
+    /**
+     * Retorna qual o método utilizado na requisição atual
+     * @return string GET ou POST
+     */
+    public static final function getMethod() {
+        if (empty(self::$requestType)) {
+            //return filter_input(INPUT_SERVER, "REQUEST_METHOD");
+            //$requestMethod = filter_input(INPUT_SERVER, "REQUEST_METHOD");
+            //filter_input usando INPUT_SERVER nao funciona no php 5.5.14 (essa é a versao na locaweb) devido a um bug
+            //https://github.com/wp-stream/stream/issues/254
+            //https://bugs.php.net/bug.php?id=49184
+            //https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=730094
+            return $_SERVER["REQUEST_METHOD"];
+        }
+        return self::$requestType;
+    }
+    
+    /**
+     * Processa a requisição e renderiza a página
+     * @param string $requestType GET, POST
+     * @param string $action Refere-se ao método
+     * @param string $responseType Tipo de retorno da pagina, JSON, PDF etc.
+     */
+    public final function service($requestType, $action, $responseType) {
+        //Definindo o tipo de resposta
+        if (!ResponseType::isValid($responseType)) {
+            $responseType = ResponseType::getDefaultType();
+        }
+        $this->responseType = $responseType;
+        
+        //Definindo o método de requisição
+        if (!RequestType::isValid($requestType)) {
+            $requestType = RequestType::GET;
+        }
+        self::$requestType = $requestType;
+        
+        $this->cleanParameters();
+        $this->_processRequest($action);
+        if ($this->render) {
+            $this->render();
+        }
+    }
+    
     /**
      * Método interno utilizado para realizar o procesamento da ação solicitada
      * @param type $action
      */
     private final function _processRequest($action) {
         $this->method = $action;
-        
+       
         //Define o nome do método que deverá ser chamado
         $method = '_' . $action;
         if (!method_exists($this, $method)) {
@@ -141,169 +248,6 @@ abstract class ProcessRequest {
     }
     
     /**
-     * Executa o método dinâmicamente e configura e seta as configurações do render
-     * @param string $method Nome do método que deverá ser chamado
-     */
-    private function executeMethod($method) {
-        $result = $this->$method();
-        if (is_array($result)) {
-            $this->pagedata = array_merge($this->pagedata, $result);
-            $this->render = true;
-        }
-        else {
-            $this->render = !is_null($result) && $result;
-        }
-        if ($this->render && empty($this->filename)) {
-            $classFCNS = strtolower(get_class($this));
-            
-            $slashExploded = explode("\\", $classFCNS);
-            $this->filename = $slashExploded[count($slashExploded)-1] . $method;
-        }
-    }
-    
-    /**
-     * Seta o identificador único
-     * @param int $id
-     */
-    public function setId($id) {
-        $this->id = $id;
-    }
-    
-    /**
-     * Configura o arquivo template(.mustache)
-     * @param string $templateName
-     */
-    public function setTemplateFile($templateName){
-        $this->filename = $templateName;
-    }
-    
-    /**
-     * Processa a requisição e renderiza a página
-     * @param string $requestType GET, POST
-     * @param string $action Refere-se ao método
-     * @param string $responseType Tipo de retorno da pagina, JSON, PDF etc.
-     */
-    public final function service($requestType, $action, $responseType) {
-        if (!defined('TEST_OR_INSTALL')) {
-            //configureWebApp();
-        }
-        //Definindo o tipo de resposta
-        if (!ResponseType::isValid($responseType)) {
-            $responseType = ResponseType::getDefaultType();
-        }
-        $this->responseType = $responseType;
-        
-        //Definindo o método de requisição
-        if (!RequestType::isValid($requestType)) {
-            $requestType = RequestType::GET;
-        }
-        self::$requestType = $requestType;
-        
-        $this->cleanParameters();
-        $this->_processRequest($action);
-        if ($this->render) {
-            $this->render();
-        }
-    }
-    
-    /**
-     * Método main implementado por padrão
-     * @return boolean
-     */
-    protected function _main() {
-        return true;
-    }
-    
-    /**
-     * Retorna o nome do arquivo de template
-     * @return type
-     */
-    protected function getFilename() {
-        return $this->filename;
-    }
-    
-    /**
-     * Retorna os dados gerados pela página (resultado de todo o processamento da página)
-     * @return array
-     */
-    public function getPagedata() {
-        if ($this->responseType == ResponseType::HTML && $this->htmlFull) {
-            $this->pagedata = array_merge(
-                $this->pagedata,
-                array(
-                    'html' => array(
-                        'pagetitle' => MemoryPage::getTitle(trim(PAGE_TITLE_PREFIX . ' ' . $this->pageTitle)),
-                        'urlbase' => DOMAIN,
-                        'css' => MemoryPage::getCss(),
-                        'js' => MemoryPage::getJs(),
-                        'extraheader' => MemoryPage::getExtraHeader()
-                    ),
-                    '_page' => get_class($this),
-                    '_action' => $this->method
-                )
-            );
-        }
-        $this->pagedata = array_merge($this->pagedata, MemoryPage::getAttributes());
-        $s = Session::getInstance();
-        if ($s->isLogged()) {
-            $this->pagedata['isLogged'] = true;
-            $this->pagedata['isAdmin'] = $s->isAdmin();
-            foreach ($s->getGroups() as $group) {
-                $this->pagedata['is' . ucfirst($group)] = true;
-            }
-            $this->pagedata['session'] = array(
-                'id' => $s->getUserId(),
-                'nome' => $s->getUserName(),
-                'email' => $s->getData('email')
-            );
-        }
-        $this->pagedata[SERVER_MODE] = true;
-        $this->pagedata['error'] = LoggerApp::getErrors();
-        return $this->pagedata;
-    }
-    
-    /**
-     * Renderiza a página exibindo o seu resultado no navegador
-     */
-    protected function render() {
-        $response = Factory::response($this->responseType);
-        $response->setHeader();
-        $response->renderContent($this->getPagedata(), $this->getFilename());
-    }
-    
-    /**
-     * Exibe a mensagem de erro
-     * @param Error $erro
-     */
-    public function setError(Error $erro) {
-        //TODO
-    }
-    
-    /**
-     * Retorna o nome da URL chamada
-     */
-    protected function getPageName() {
-        return $_GET['_page'];
-    }
-    
-    /**
-     * Libera um método para um grupo ou um conjunto de grupos
-     * @param string $method Nome do método
-     * @param array|string $groups Nome do grupo ou array de grupos
-     */
-    protected function allowMethod($method, $groups) {
-        if (!is_array($groups)) {
-            $groups = array($groups);
-        }
-        if (startsWith($method, '_')) {
-            $method = substr($method, 1);
-        }
-        $this->grantsRules[$method] = array_merge(
-            getValueFromArray($this->grantsRules, $method, array()), $groups
-        );
-    }
-    
-    /**
      * Verifica se o usuário possui permissão para acessar o método solicitado
      * Se não há regras definidas para o método, o mesmo será liberado
      * 
@@ -325,6 +269,96 @@ abstract class ProcessRequest {
         }
         
         return count(array_intersect($login->getGroups(), $allowed)) > 0;
+    }
+    
+    /**
+     * Executa o método dinâmicamente e configura e seta as configurações do render
+     * @param string $method Nome do método que deverá ser chamado
+     */
+    private function executeMethod($method) {
+        $result = $this->$method();
+        if (is_array($result)) {
+            $this->pagedata = array_merge($this->pagedata, $result);
+            $this->render = true;
+        }
+        else {
+            $this->render = !is_null($result) && $result;
+        }
+        if ($this->render && empty($this->filename)) {
+            $classFCNS = strtolower(get_class($this));
+            
+            $slashExploded = explode("\\", $classFCNS);
+            $this->filename = $slashExploded[count($slashExploded)-1] . $method;
+        }
+    }
+    
+    /**
+     * Renderiza a página exibindo o seu resultado no navegador
+     */
+    protected function render() {
+        $response = Factory::response($this->responseType);
+        $response->setHeader();
+        $response->renderContent($this->getPagedata(), $this->getFilename());
+    }
+    
+    /**
+     * Retorna os dados gerados pela página (resultado de todo o processamento da página)
+     * 
+     * @return array
+     */
+    public function getPagedata() {
+        if ($this->responseType == ResponseType::HTML && $this->htmlFull) {
+            $this->pagedata = array_merge(
+                $this->pagedata,
+                array(
+                    'html' => array(
+                        'pagetitle' => MemoryPage::getTitle(trim(PAGE_TITLE_PREFIX . ' ' . $this->pageTitle)),
+                        'urlbase' => DOMAIN,
+                        'css' => MemoryPage::getCss(),
+                        'js' => MemoryPage::getJs(),
+                        'extraheader' => MemoryPage::getExtraHeader()
+                    ),
+                    '_page' => get_class($this),
+                    '_action' => $this->method
+                )
+            );
+        }
+        
+        $this->pagedata = array_merge($this->pagedata, MemoryPage::getAttributes());
+        $s = Session::getInstance();
+        if ($s->isLogged()) {
+            $this->pagedata['isLogged'] = true;
+            $this->pagedata['isAdmin'] = $s->isAdmin();
+            foreach ($s->getGroups() as $group) {
+                $this->pagedata['is' . ucfirst($group)] = true;
+            }
+            $this->pagedata['session'] = array(
+                'id' => $s->getUserId(),
+                'nome' => $s->getUserName(),
+                'email' => $s->getData('email')
+            );
+        }
+        $this->pagedata[SERVER_MODE] = true;
+        $this->pagedata['error'] = LoggerApp::getErrors();
+        //$this->pagedata["___get___"] =  $_GET;
+        return $this->pagedata;
+    }
+    
+    /**
+     * Libera um método para um grupo ou um conjunto de grupos
+     * @param string $method Nome do método
+     * @param array|string $groups Nome do grupo ou array de grupos
+     */
+    protected function allowMethod($method, $groups) {
+        if (!is_array($groups)) {
+            $groups = array($groups);
+        }
+        if (startsWith($method, '_')) {
+            $method = substr($method, 1);
+        }
+        $this->grantsRules[$method] = array_merge(
+            getValueFromArray($this->grantsRules, $method, array()), $groups
+        );
     }
     
     /**
@@ -457,38 +491,5 @@ abstract class ProcessRequest {
                 }
             }
         }
-    }
-    
-    /**
-     * Verifica se é uma requisição GET
-     * @return boolean
-     */
-    public static final function isGETRequest() {
-        return self::$requestType == 'GET';
-    }
-    
-    /**
-     * Verifica se é uma requisição POST
-     * @return boolean
-     */
-    public static final function isPOSTRequest() {
-        return self::$requestType == 'POST';
-    }
-    
-    /**
-     * Retorna qual o método utilizado na requisição atual
-     * @return string GET ou POST
-     */
-    public static final function getMethod() {
-        if (empty(self::$requestType)) {
-            //return filter_input(INPUT_SERVER, "REQUEST_METHOD");
-            //$requestMethod = filter_input(INPUT_SERVER, "REQUEST_METHOD");
-            //filter_input usando INPUT_SERVER nao funciona no php 5.5.14 (essa é a versao na locaweb) devido a um bug
-            //https://github.com/wp-stream/stream/issues/254
-            //https://bugs.php.net/bug.php?id=49184
-            //https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=730094
-            return $_SERVER["REQUEST_METHOD"];
-        }
-        return self::$requestType;
     }
 }
