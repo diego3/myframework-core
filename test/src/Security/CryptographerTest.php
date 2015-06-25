@@ -25,12 +25,15 @@ class CryptographerTest extends \PHPUnit_Framework_TestCase {
     public function testMd5VerifyPassword() {
         $hash = $this->cripto->encriptyPassword("admin");
         $expected = md5("admin" . ")*$&)#2");
+        
         $this->assertEquals($expected , $hash);
+        $this->assertTrue($this->cripto->verifyPassword("admin", $hash));
     }
     
     public function testBCryptVerifyPassword() {
         $bcrypt = Factory::getCryptographer(Cryptographer::BCRYPT);
         $hash_password = $bcrypt->encriptyPassword("admin");
+        
         $hasOk = $bcrypt->verifyPassword("admin", $hash_password);
         $this->assertTrue($hasOk);
     }

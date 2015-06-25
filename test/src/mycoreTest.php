@@ -132,9 +132,9 @@ A;
         $this->assertTrue(is_assoc(array('a' => 'xyz', 'b' => array())));
     }
     
-    public function testHashIt() {
-        $this->assertEquals(md5('teste' . UPSALT), hashit('teste'));
-        $this->assertEquals(md5('teste' . '12345'), hashit('teste', '12345'));
-        $this->assertEquals(md5('teste' . '12345'), hashit('teste12345', ''));
-    }
+//    public function testHashIt() {
+//        $this->assertEquals(md5('teste' . UPSALT), hashit('teste'));
+//        $this->assertEquals(md5('teste' . '12345'), hashit('teste', '12345'));
+//        $this->assertEquals(md5('teste' . '12345'), hashit('teste12345', ''));
+//    }
 }
