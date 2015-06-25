@@ -1,6 +1,5 @@
 <?php
 
-require_once 'util/mycore.php';
 
 class MycoreTest extends PHPUnit_Framework_TestCase {
     
