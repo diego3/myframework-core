@@ -5,6 +5,7 @@ namespace MyFrameWork\DataType;
 use MyFrameWork\DataType\Datatype;
 use MyFrameWork\Enum\Flag;
 use Respect\Validation\Validator as v;
+use MyFrameWork\Factory;
 
 //require_once PATH_LOCAL . '/vendor/Validation/main.php';
 
