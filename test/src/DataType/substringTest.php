@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of DataTypeStringTest
+ * 
  *
  * @author Diego Rosa dos Santos <diegosantos@alphaeditora.com.br>
  */
