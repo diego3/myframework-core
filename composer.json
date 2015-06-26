@@ -24,6 +24,7 @@
     "require-dev": {
        "zendframework/zend-math": "2.4.0",
        "zendframework/zend-crypt" : "2.4.0",
+       "apache/log4php": "2.3.0",
        "respect/validation": "0.9.0", 
        "phpunit/phpunit" : "4.5.*"
     },
