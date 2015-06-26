@@ -1,7 +1,9 @@
 <?php
-require_once 'util/database/Where.php';
+namespace MyFrameWork\DataBase;
 
-class WhereTest extends PHPUnit_Framework_TestCase {
+use MyFrameWork\DataBase\Where;
+
+class WhereTest extends \PHPUnit_Framework_TestCase {
 
     public function testSimpleFormat() {
         $formats = array(
@@ -201,7 +203,6 @@ class WhereTest extends PHPUnit_Framework_TestCase {
         $w2 = Where::getInstance(array('a' => 'b'));
         $this->assertEquals($w1->getSQL(), $w2->getSQL());
         $this->assertEquals($w1->getParams(), $w2->getParams());
-        
     }
     
     public function testException() {

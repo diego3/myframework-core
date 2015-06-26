@@ -51,10 +51,6 @@ class DAOTest extends \PHPUnit_Framework_TestCase {
      */
     protected $dao;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp() {
         $this->db = Factory::database();
         $this->assertNotNull($this->db);
@@ -68,7 +64,8 @@ class DAOTest extends \PHPUnit_Framework_TestCase {
 SQL;
         $sql2 = <<<'SQL'
    CREATE TABLE IF NOT EXISTS test2 (
-     id1 int, id2 int,
+     id1 int, 
+     id2 int,
      name  varchar(10) NOT NULL CHECK (name <> ''),
      ativo bool DEFAULT true,
      PRIMARY KEY(id1, id2)
@@ -79,6 +76,7 @@ SQL;
             $this->assertTrue($this->db->exec("INSERT INTO test (name) VALUES ('value 1')")>0);
             $this->assertTrue($this->db->exec("INSERT INTO test (name) VALUES ('value 2')")>0);
             $this->assertTrue($this->db->exec("INSERT INTO test (name) VALUES ('value 3')")>0);
+            
             $this->db->exec($sql2);
             $this->assertTrue($this->db->exec("INSERT INTO test2 (id1, id2, name) VALUES (1, 1, 'value 1')")>0);
             $this->assertTrue($this->db->exec("INSERT INTO test2 (id1, id2, name) VALUES (1, 2, 'value 2')")>0);
@@ -90,10 +88,6 @@ SQL;
         $this->dao = new MyDAO();
     }
     
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown() {
         $this->assertNotNull($this->db);
         
