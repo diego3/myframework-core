@@ -5,6 +5,7 @@ define('TEST_OR_INSTALL', true);
 
 define("PATH_LOCAL", realpath(__DIR__));//"D:\site\www\myframework\test"
 define("PATH_MYFRAME", "D:\site\www\myframework");
+//define("PATH_APP", PATH_LOCAL . "/../");
 
 //require_once "D:/site/www/myframework/vendor/autoload.php";
 require_once "/../vendor/autoload.php";

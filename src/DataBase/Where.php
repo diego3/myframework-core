@@ -140,7 +140,7 @@ class Where {
         if (is_array($where)) {
             return new Where($where);
         }
-        else if (!is_a($where, 'Where')) {
+        else if (!is_a($where, 'MyFrameWork\\DataBase\\Where')) {
             return new Where(array());
         }
         return $where;

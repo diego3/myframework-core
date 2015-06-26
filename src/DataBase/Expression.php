@@ -53,7 +53,7 @@ class Expression {
      *      groupBy => Lista de campos para agrupamento
      *      having => wherearray ou um objeto Where para condição do agrupamento
      */
-    public function __construct($parts=array()) { 
+    public function __construct(array $parts=array()) { 
         $this->setWhere(getValueFromArray($parts, 'where', array()));
         $orderBy = getValueFromArray($parts, 'orderBy', array());
         if (!is_array($orderBy)) {
@@ -300,10 +300,14 @@ class Expression {
      * 
      * @param mixed $parts
      * @return \Expression
+     * @throws \Exception caso $parts seja inválido
      */
     public static function getInstance($parts) {
-        if (!is_a($parts, 'Expression')) {
-            return new Expression($parts);
+        if (!is_a($parts, 'MyFrameWork\\DataBase\\Expression')) {
+            if(is_array($parts)) {
+                return new Expression($parts);
+            }
+            throw new Exception("falha ao tentar criar um Expression, o argumento 'parts' precisa ser um array mas recebeu : ". gettype($parts));
         }
         return $parts;
     }
