@@ -1,9 +1,17 @@
 <?php
-require_once 'util/datatype/DatatypeEnum.php';
-require_once 'util/enum/Sexo.php';
-require_once 'util/enum/Estado.php';
 
-class DatatypeEnumTest extends DatatypeBaseTest {
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeEnum;
+use MyFrameWork\Enum\Flag;
+use MyFrameWork\Enum\Sexo;
+use MyFrameWork\Enum\Estado;
+
+//@todo   a factory nao consegue encontrar a classe Logger...
+//Warning: Uncaught require_once(D:\site\www\myframework\test/vendor/apache/log4php/src/main/php/Logger.php): 
+//failed to open stream: No such file or directory
+
+class DatatypeEnumTest extends \DatatypeBaseTest {
 
     /**
      * @var DatatypeEnum

@@ -1,5 +1,7 @@
 <?php
-require_once 'util/ProcessRequest.php';
+namespace MyFrameWork\Request;
+
+use MyFrameWork\Request\ProcessRequest;
 
 class MyProcessRequest extends ProcessRequest {
     public function __construct() {

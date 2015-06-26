@@ -1,6 +1,6 @@
 <?php
 
-class DatatypeBaseTest extends PHPUnit_Framework_TestCase {
+class DatatypeBaseTest extends \PHPUnit_Framework_TestCase {
     /**
      * @var array
      */

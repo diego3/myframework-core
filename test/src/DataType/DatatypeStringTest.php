@@ -1,9 +1,17 @@
 <?php
 
-use \DatatypeBaseTest;
+namespace MyFrameWork\DataType;
+
+use MyFrameWork\DataType\DatatypeString;
+use MyFrameWork\Enum\Flag;
+use MyFrameWork\Memory\Memory;
+
+//@todo a Factory nao consegue encontrar o Logger.php
+//Warning: Uncaught require_once(D:\site\www\myframework\test/vendor/apache/log4php/src/main/php/Logger.php): 
+//failed to open stream: No such file or directory
 
 
-class DatatypeStringTest extends DatatypeBaseTest {
+class DatatypeStringTest extends \DatatypeBaseTest {
 
     /**
      * @var DatatypeString

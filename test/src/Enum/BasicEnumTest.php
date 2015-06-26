@@ -1,5 +1,8 @@
 <?php
-require_once ('util/enum/BasicEnum.php');
+
+namespace MyFrameWork\Enum;
+
+use MyFrameWork\Enum\BasicEnum;
 
 abstract class DaysOfWeek extends BasicEnum {
     const Sunday = 0;
