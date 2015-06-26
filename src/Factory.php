@@ -232,7 +232,12 @@ class Factory {
      * @return Logger
      */
     public static function log() {
-        require_once PATH_LOCAL . '/vendor/apache/log4php/src/main/php/Logger.php';
+        if(defined("TEST_OR_INSTALL")) {
+            require_once PATH_LOCAL . '/../vendor/apache/log4php/src/main/php/Logger.php';
+        }
+        else {
+            require_once PATH_LOCAL . '/vendor/apache/log4php/src/main/php/Logger.php';
+        }
         
         if (Memory::get('debug', false)) {
             return Logger::getLogger('debug');
