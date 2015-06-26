@@ -26,3 +26,7 @@ define("DATABASE_HOST", getValueFromArray($databaseconfig['database'], 'host', '
 define("DATABASE_PORT", getValueFromArray($databaseconfig['database'], 'port', ''));
 define("DATABASE_USER", getValueFromArray($databaseconfig['database'], 'user', ''));
 define("DATABASE_PASSWORD", getValueFromArray($databaseconfig['database'], 'password'), '');
+
+
+//Error lib - http://logging.apache.org/log4php/quickstart.html
+Logger::configure(PATH_LOCAL . '/conf/php4log.xml');
