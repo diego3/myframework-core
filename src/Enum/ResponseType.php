@@ -10,9 +10,11 @@ use MyFrameWork\Enum\BasicEnum;
 abstract class ResponseType extends BasicEnum {
     const HTML = 'HTML';
     const JSON = 'JSON';
-    const XML = 'XML';
-    const XLS = 'XLS';
-    const CSV = 'CSV';
+    const XML  = 'XML';
+    const XLS  = 'XLS';
+    const CSV  = 'CSV';
+    const EMPT = 'EMPTY';
+    
     /**
      * 
      * @param type $value
