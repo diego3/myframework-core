@@ -2,6 +2,8 @@
 namespace MyFrameWork\Request;
 
 use MyFrameWork\Request\ProcessRequest;
+use MyFrameWork\Enum\RequestType;
+use MyFrameWork\Enum\ResponseType;
 
 class MyProcessRequest extends ProcessRequest {
     public function __construct() {
@@ -41,6 +43,7 @@ class ProcessRequestTest extends \PHPUnit_Framework_TestCase {
 
     protected function setUp() {
         $this->object = new MyProcessRequest();
+        $_SERVER["REQUEST_METHOD"] = "GET";
     }
 
     protected function tearDown() {
@@ -85,10 +88,10 @@ class ProcessRequestTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetMethod() {
-        //$this->assertFalse(headers_sent(), "O header já foi enviado ? por quem ? onde ? pelo ResponseHTML ?");
+        $this->assertFalse(headers_sent(), "O header já foi enviado ? por quem ? onde ? pelo ResponseHTML ?");
         $this->assertFalse(ProcessRequest::isGETRequest());
         $this->assertFalse(ProcessRequest::isPOSTRequest());
-        $this->assertNull(ProcessRequest::getMethod());
+        $this->assertEquals(RequestType::GET, ProcessRequest::getMethod());
         
         $this->object->service(RequestType::GET, 'main', ResponseType::HTML);
         $this->assertEquals(RequestType::GET, ProcessRequest::getMethod());

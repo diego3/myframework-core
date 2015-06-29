@@ -8,6 +8,7 @@ use MyFrameWork\Event\EventManager,
 use MyFrameWork\DataBase\PgDataBase;
 use MyFrameWork\DataBase\MyDataBase;
 use MyFrameWork\Memory\Memory;
+use MyFrameWork\Response\EmptyResponse;
 use Logger;
 use ReflectionClass;
 
@@ -18,6 +19,7 @@ class Factory {
     
     /**
      * Cria um objeto do tipo response
+     * 
      * @param string $type Nome do response
      * @return \Response
      */
@@ -35,24 +37,23 @@ class Factory {
                 return $factory->newInstance();
             }
             // @codeCoverageIgnoreStart
-        }else {
+        }
+        else {
             //TODO log this error
             echo "O arquivo {$fileName} do tipo Response não existe";
         }
         // @codeCoverageIgnoreEnd
        
-       require_once PATH_MYFRAME . '/src/Response/EmptyResponse.php';
        return new EmptyResponse();
     }
     
     /**
      * Cria e retorna um objeto para a página solicitada
-     * @param string $page Nome da página que irá processar a solicitação
+     * 
+     * @param  string          $page Nome da página que irá processar a solicitação
      * @return \ProcessRequest
      */
     public static function page($page) {
-        //require_once PATH_MYFRAME . '/src/Request/ProcessRequest.php';
-        
         $className = ucfirst($page);
         if (file_exists(PATH_APP . '/Page/' . $className . '.php')) {
             //Carrega uma página da aplicação

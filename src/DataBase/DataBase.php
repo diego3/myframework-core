@@ -58,7 +58,7 @@ abstract class DataBase extends PDO {
         }
         catch (PDOException $e) {
             Factory::log()->info($e->getMessage());
-            Factory::log()->fatal("[".date('H:m:i')."]Falha ao conectar-se com o banco de dados erro: {$e->getMessage()}", $e);
+            Factory::log()->fatal("[".date('H:i:s')."]Falha ao conectar-se com o banco de dados erro: {$e->getMessage()}", $e);
         }
     }
     
