@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/diego3/myframework-core.png?branch=master)](https://travis-ci.org/diego3/myframework-core)
+
 O que é
 --------
 Micro Framework para o desenvolvimento de aplicações web.
