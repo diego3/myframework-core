@@ -2,7 +2,7 @@
 
 namespace MyFrameWork\Email;
 
-use MyFrameWork\Email\Email;
+use MyFrameWork\Email\AbstractEmail;
 use MyFrameWork\Email\Smtp;
 use MyFrameWork\Factory as Logger;
 
@@ -80,26 +80,37 @@ class Config {
     /**
      * Pré configura um servidor Smtp
      * 
-     * @param Smtp $smtp
+     * @param Smtp $smtp  Um servidor Smtp
+     * @return boolean 
      */
     public function bindSmtp(Smtp $smtp) {
         $props = $this->load();
+        if(empty($props)) {
+            return false;
+        }
+        
         $smtp->setSmtpHost($props["mail"]["smtpHost"])
                 ->setSmtpPassword($props["mail"]["smtpPassword"])
                 ->setSmtpPort($props["mail"]["smtpPort"])
                 ->setSmtpSecure($props["mail"]["smtpSecure"])
                 ->setSmtpUsername($props["mail"]["smtpUsername"]);
+        return true;
     }
 
     /**
      * Pré configura um email para uso
      * 
-     * @param Email $email
+     * @param  AbstractEmail  $email  Uma implementação de AbstractEmail
+     * @return boolean      
      */
-    public function bindEmail(Email $email) {
+    public function bindEmail(AbstractEmail $email) {
         $props = $this->load();
+        if(empty($props)) {
+            return false;
+        }
         $email->setFromEmail($props["mail"]["fromEmail"])
                 ->setFromName($props["mail"]["fromName"]);
+        return true;
     }
 
 }
