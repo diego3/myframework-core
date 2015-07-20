@@ -4,7 +4,7 @@ namespace MyFrameWork\Email;
 
 use MyFrameWork\Email\Email;
 use MyFrameWork\Email\Smtp;
-use MyFrameWork\Factory;
+use MyFrameWork\Factory as Logger;
 
 /**
  * 
@@ -67,7 +67,7 @@ class Config {
      */
     public function load() {
         if (!file_exists($this->filename)) {
-            Factory::log()->fatal("Arquivo de configuração de email não foi encontrado no path {$this->filename}");
+            Logger::log()->fatal("Arquivo de configuração de email não foi encontrado no path {$this->filename}");
             return array();
         }
         $has_parsed = parse_ini_file($this->filename, true);
