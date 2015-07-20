@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Model\Email\Exception;
+namespace MyFrameWork\Email\Exception;
 
 /**
  * Description of InvalidMailerException

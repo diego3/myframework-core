@@ -27,6 +27,11 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
      * @var string Utilizar Mailer constantes
      */
     protected $method;
+    /**
+     *
+     * @var boolean 
+     */
+    protected $ishtml = false;
     
     public function __construct() {
         $this->php_mailer = new \PHPMailer;
@@ -148,8 +153,13 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
         }
     }
 
-    public function msgHTML($content) {
-        $this->php_mailer->msgHTML($content);
+    public function setMessage($content) {
+        if($this->isHtml()) {
+            $this->php_mailer->msgHTML($content);
+        }
+        else {
+            $this->php_mailer->Body = $content;
+        }
     }
 
     public function setSubject($subject) {
@@ -159,7 +169,33 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
     public function getErrorInfo() {
         return $this->php_mailer->ErrorInfo; 
     }
-        
     
+    /**
+     * Pergunta se está em modo html ou não
+     * 
+     * @return boolean
+     */
+    public function isHtml() {
+        return $this->ishtml;
+    }
     
+    /**
+     * Ativa o uso do html
+     * 
+     * @return \MyFrameWork\Email\PhpMailer
+     */
+    public function enableHtml() {
+        $this->ishtml = true;
+        return $this;
+    }
+    
+    /**
+     * Desativa o uso do html
+     * 
+     * @return \MyFrameWork\Email\PhpMailer
+     */
+    public function disableHtml() {
+        $this->ishtml = false;
+        return $this;
+    }
 }

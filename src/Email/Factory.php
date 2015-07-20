@@ -63,12 +63,20 @@ class Factory {
     /**
      * Retorna um Email configurado com fromName e fromEmail a partir do arquivo default de configuração
      * 
-     * @return Email  Retorna um Email configurado
+     * @param  Emails|string $type  O tipo de email a ser criado use Emails::CONSTANTES
+     * @return Email                Retorna a instância de um tipo de email
      */
-    public static function getEmail() {
+    public static function getEmail($type = "") {
         $config = self::getConfig();
         
-        $email = new Email();
+        if(empty($type)) {
+            //cria-se o email padrão caso nenhum tipo específico seja escolhido
+            $email = new Email();
+        }
+        else {
+            $email = new $type();
+        }
+        
         $config->bindEmail($email);
        
         return $email;

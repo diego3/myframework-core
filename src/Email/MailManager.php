@@ -5,7 +5,7 @@ namespace MyFrameWork\Email;
 use MyFrameWork\Factory;
 use MyFrameWork\Template;
 
-use MyFrameWork\Email\Email;
+use MyFrameWork\Email\AbstractEmail;
 use MyFrameWork\Email\Mailer;
 
 /**
@@ -62,7 +62,7 @@ class MailManager {
     }
     
     
-    public function send(Email $email) {
+    public function send(AbstractEmail $email) {
         try{
             //Set who the message is to be sent from
             $this->mailer->setFrom($email->getFromEmail(), $email->getFromName());
@@ -75,17 +75,17 @@ class MailManager {
             $this->mailer->setBCc($email->getBCc());
             $this->mailer->setSubject($email->getAssunto());
             
-            /**
-             * Carregar templates de emails.
-             *  - email de cobrança do prazo ao formando 
-             *  - email de finalização . protocolo de confirmação (marcar quando for reenvio ?)
-             *  - outros
-             */
-            //CONTINUAR AQUI ........
-            $mustache = Template::singleton();
-            $mustache->renderHTML(file_get_contents('email_template.mustache'), $params);
-            $this->mailer->msgHTML(file_get_contents('email_template.mustache')  /*, dirname(__FILE__)*/);
-
+            
+            if($email instanceof \MyFrameWork\Email\HtmlInterface) {
+                $mustache = Template::singleton();
+                $html_body = $mustache->renderHTML(file_get_contents($email->getTemplatePath()), $params);
+                $this->mailer->setMessage($html_body  /*, dirname(__FILE__)*/);
+            }
+            else {
+                $this->mailer->disableHtml();
+                $this->mailer->setMessage($email->getMessage());
+            }
+            
             //Replace the plain text body with one created manually
             //$mail->AltBody = 'This is a plain-text message body';
             
