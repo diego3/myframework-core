@@ -2,7 +2,7 @@
 
 namespace MyFrameWork\Email;
 
-use MyFrameWork\Factory;
+use MyFrameWork\Factory as Logger;
 use MyFrameWork\Template;
 
 use MyFrameWork\Email\AbstractEmail;
@@ -94,14 +94,14 @@ class MailManager {
             
             //send the message, check for errors
             if (!$this->mailer->send()) {
-                Factory::log()->fatal("Mailer Send Error: " . $this->mailer->getErrorInfo());
+                Logger::log()->fatal("Mailer Send Error: " . $this->mailer->getErrorInfo());
                 return false;
             } 
             return true;
         } catch (phpmailerException $e) {
-            Factory::log()->fatal("phpmailerException : ". $e->errorMessage()); //Pretty error messages from PHPMailer
+            Logger::log()->fatal("phpmailerException : ". $e->errorMessage()); //Pretty error messages from PHPMailer
         } catch (\Exception $e) {
-            Factory::log()->fatal("phpMailer Exception" . $e->getMessage()); //Boring error messages from anything else!
+            Logger::log()->fatal("phpMailer Exception" . $e->getMessage()); //Boring error messages from anything else!
         }
         return false;
     }
