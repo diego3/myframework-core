@@ -4,6 +4,8 @@ Como usar
  * uso básico
 
 ```php
+use MyFrameWork\Email\Factory as EFactory;
+use MyFrameWork\Email\Mailers;
 
 $manager = Factory::getMailManager(Mailers::PHP);
 $email  = Factory::getEmail();
@@ -18,6 +20,9 @@ $manager->send($email);
  * Anexando arquivos
 
 ```php
+
+use MyFrameWork\Email\Factory as EFactory;
+use MyFrameWork\Email\Mailers;
 
 $manager = Factory::getMailManager(Mailers::PHP);
 $email   = Factory::getEmail();
@@ -38,6 +43,8 @@ desses arquivos para em seguida ser informado o caminho dos mesmos no servidor
  * Enviado email com cópia para outras pessoas
 
 ```php
+use MyFrameWork\Email\Factory as EFactory;
+use MyFrameWork\Email\Mailers;
 
 $manager = Factory::getMailManager(Mailers::PHP);
 $email   = Factory::getEmail();
@@ -62,6 +69,8 @@ Email Html usando templates
 =======================
 
 ```php
+use MyFrameWork\Email\Factory as EFactory;
+use MyFrameWork\Email\Mailers;
 
 $manager = Factory::getMailManager(Mailers::PHP);
 $email   = Factory::getEmail(Mails::HTML);/* @var $email \MyFrameWork\Email\EmailHtml */
