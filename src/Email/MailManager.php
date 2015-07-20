@@ -31,34 +31,7 @@ class MailManager {
     }
     
     public function smtpChecks() {
-        //Create a new SMTP instance
-        $smtp = new SMTP;
-
-        //Enable connection-level debug output
-        $smtp->do_debug = SMTP::DEBUG_CONNECTION;
-
-        try {
-            //Connect to an SMTP server
-            if ($smtp->connect('mail.example.com', 25)) {
-                //Say hello
-                if ($smtp->hello($this->smtp->getSmtpHost())) { //Put your host name in here
-                    //Authenticate
-                    if ($smtp->authenticate('username', 'password')) {
-                        return true;
-                    } else {
-                        throw new Exception('Authentication failed: ' . $smtp->getLastReply());
-                    }
-                } else {
-                    throw new Exception('HELO failed: '. $smtp->getLastReply());
-                }
-            } else {
-                throw new Exception('Connect failed');
-            }
-        } catch (Exception $e) {
-            throw new Exception('SMTP error: '. $e->getMessage());
-        }
-        //Whatever happened, close the connection.
-        $smtp->quit(true);
+        return $this->mailer->checkSmtp();
     }
     
     
@@ -99,9 +72,9 @@ class MailManager {
             } 
             return true;
         } catch (phpmailerException $e) {
-            Logger::log()->fatal("phpmailerException : ". $e->errorMessage()); //Pretty error messages from PHPMailer
+            Logger::log()->fatal("phpmailer Exception : ". $e->errorMessage()); //Pretty error messages from PHPMailer
         } catch (\Exception $e) {
-            Logger::log()->fatal("phpMailer Exception" . $e->getMessage()); //Boring error messages from anything else!
+            Logger::log()->fatal("phpMailer Exception : " . $e->getMessage()); //Boring error messages from anything else!
         }
         return false;
     }

@@ -66,10 +66,12 @@ class Config {
      * @return array Retorna um array vazio em casos de falha
      */
     public function load() {
+        $this->filename = str_replace("\\", "/", $this->filename);
         if (!file_exists($this->filename)) {
-            Logger::log()->fatal("Arquivo de configuração de email não foi encontrado no path {$this->filename}");
+            Logger::log()->fatal("[".date("H:i:s")."] Arquivo de configuração de email não foi encontrado no path {$this->filename}");
             return array();
         }
+        
         $has_parsed = parse_ini_file($this->filename, true);
         if (!$has_parsed) {
             return array();
