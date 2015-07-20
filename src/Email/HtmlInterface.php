@@ -27,5 +27,8 @@ interface HtmlInterface {
      */
     public function setTemplatePath($template);
     
+    public function setTemplateParams($params);
+    
+    public function getTemplateParams();
     
 }

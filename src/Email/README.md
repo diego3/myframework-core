@@ -64,7 +64,7 @@ Email Html usando templates
 ```php
 
 $manager = Factory::getMailManager(Mailers::PHP);
-$email  = Factory::getEmail(Mails::HTML);/* @var $email \MyFrameWork\Email\EmailHtml */
+$email   = Factory::getEmail(Mails::HTML);/* @var $email \MyFrameWork\Email\EmailHtml */
 
 // variáveis no formato do mustache
 // não precisa usar $email->setMessage() por que o conteúdo do email vai ser 
@@ -75,8 +75,11 @@ $template_params = array(
     //...
 );
 
+// passa os parâmetros para o template
+$email->setTemplateParams($template_params);
+
 // renderiza o template usando o mustache
-$email->setTemplatePath("path/to/template/email_template.mustache", $params);
+$email->setTemplatePath("path/to/template/email_template.mustache");
 
 $email->setAssunto("Assunto do email!");
 $email->addTo("destinatario@domain.com", "Nome do destinatário");

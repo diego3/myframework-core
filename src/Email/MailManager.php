@@ -77,8 +77,9 @@ class MailManager {
             
             
             if($email instanceof \MyFrameWork\Email\HtmlInterface) {
+                
                 $mustache = Template::singleton();
-                $html_body = $mustache->renderHTML(file_get_contents($email->getTemplatePath()), $params);
+                $html_body = $mustache->renderHTML(file_get_contents($email->getTemplatePath()), $email->getTemplateParams());
                 $this->mailer->setMessage($html_body  /*, dirname(__FILE__)*/);
             }
             else {

@@ -20,6 +20,13 @@ class EmailHtml extends AbstractEmail implements HtmlInterface {
     protected $template;
     
     /**
+     * Variaveis mustache
+     * 
+     * @var array 
+     */
+    protected $params;
+    
+    /**
      * Retorna o caminho para o template html
      * 
      * @return string 
@@ -41,6 +48,14 @@ class EmailHtml extends AbstractEmail implements HtmlInterface {
             throw new \InvalidArgumentException("O arquivo de template do email deve ser do tipo .mustache");
         }
         $this->template = $template;
+    }
+
+    public function setTemplateParams($params) {
+        $this->params = $params;
+    }
+    
+    public function  getTemplateParams(){
+        return $this->params;
     }
 
 }
