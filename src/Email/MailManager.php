@@ -16,12 +16,12 @@ use MyFrameWork\Email\Mailer;
 class MailManager {
    /**
     *
-    * @var \Application\Model\Email\Smtp 
+    * @var \MyFrameWork\Email\Smtp 
     */
     protected $smtp;
     /**
      *
-     * @var \Application\Model\Email\Mailer 
+     * @var \MyFrameWork\Email\Mailer 
      */
     protected $mailer;
     

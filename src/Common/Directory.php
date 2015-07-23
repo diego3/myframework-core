@@ -7,7 +7,7 @@ namespace MyFrameWork\Common;
  *
  * @author Diego Rosa dos Santos <diegosantos@alphaeditora.com.br>
  */
-class Directory {
+class Directory extends \DirectoryIterator {
     
     
     /**
@@ -32,5 +32,23 @@ class Directory {
         return $folderExists;
     }
     
+    public function isZip($filename){
+        $this->typeOfFile($filename, ".zip");
+    }
+    
+    public function isRar($filename){
+        return $this->typeOfFile($filename, ".rar");
+    }
+    
+    protected function typeOfFile($filename, $stringType) {
+        if(empty($filename) || $stringType) {
+            return false;
+        }
+        
+        if(endsWith($filename, $stringType)) {
+            return true;
+        }
+        return false;
+    }
     
 }

@@ -112,6 +112,27 @@ abstract class AbstractEmail {
         return $this;
     }
     
+    /**
+     * Limpa todos os endereços TO
+     */
+    public function clearTo() {
+        $this->to = [];
+    }
+    
+    /**
+     * Limpa todos os endereços CC
+     */
+    public function clearCc() {
+        $this->cc = [];
+    }
+    
+    /**
+     * Limpa todos os endereços BCC
+     */
+    public function clearBCc() {
+        $this->bcc = [];
+    }
+    
      /**
      * Adiciona um destinatário no modo cópia
      * 
