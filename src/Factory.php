@@ -66,7 +66,9 @@ class Factory {
             $fileName = PATH_DEFAULT . '/Page/' . $className . '.php';
         }
         else {
-            return self::page('ErrorPage');
+            $errorPage = self::page('ErrorPage');
+            $errorPage->setErrorMessage("A classe {$className} não foi encontrada");
+            return $errorPage;
         }
         
         require_once($fileName);
@@ -91,7 +93,9 @@ class Factory {
         else {
             // @codeCoverageIgnoreStart
             //Só entra neste else caso exista alguma classe que não seja Page na pasta dos pages
-            return self::page('ErrorPage');
+            $errorPage = self::page('ErrorPage');
+            $errorPage->setErrorMessage("A classe {$className} não é valida!");
+            return $errorPage;
             // @codeCoverageIgnoreEnd
         }
     }

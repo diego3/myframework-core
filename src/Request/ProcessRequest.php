@@ -228,9 +228,9 @@ abstract class ProcessRequest {
         }
         
         if (empty($method)) {
-            //'A página solicitada não existe'
-            die('O Método solicitado: "' . $action . '" não foi implementado');
-            //TODO Error
+            $errorPage = Factory::page('ErrorPage');
+            $errorPage->setErrorMessage('O Método solicitado: "' . $action . '" não foi implementado');
+            return $errorPage;
         }
         else {
             $this->preProcess();
