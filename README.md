@@ -1,5 +1,10 @@
 [![Build Status](https://travis-ci.org/diego3/myframework-core.png?branch=master)](https://travis-ci.org/diego3/myframework-core)
 
+Zend Event Manager BRANCH
+-----------
+Versão criada para integrar o event manager da zend sem comprometer a versão estável.
+
+
 O que é
 --------
 Micro Framework para o desenvolvimento de aplicações web.
@@ -28,7 +33,7 @@ Arquivo necessário para funcionamento da aplicação
 
 abra o arquivo httpd-vhost.conf no seu sistema operacional e adicione o seguinte:
 
-```
+```html
 <VirtualHost *:80>
      ServerName mydomain.local
      DocumentRoot "path/to/my/project/public"
@@ -40,3 +45,5 @@ abra o arquivo httpd-vhost.conf no seu sistema operacional e adicione o seguinte
          Allow from all
      </Directory>
  </VirtualHost>
+```
+
