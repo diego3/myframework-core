@@ -111,11 +111,15 @@ abstract class ProcessRequest {
         $this->id = $id;
     }
     
-    /**
-     * Configura o arquivo template(.mustache)
-     * @param string $templateName
+     /**
+     * Configura o arquivo template 
+     * 
+     * @param string $templateName O nome do arquivo de template SEM a extensão .mustache
      */
     public function setTemplateFile($templateName){
+        if(endsWith($templateName, ".mustache")) {
+            $this->filename = trim(str_replace(".mustache", "", $templateName));
+        }
         $this->filename = $templateName;
     }
     
