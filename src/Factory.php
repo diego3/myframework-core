@@ -67,7 +67,7 @@ class Factory {
         }
         else {
             $errorPage = self::page('ErrorPage');
-            $errorPage->setErrorMessage("A classe {$className} não foi encontrada");
+            $errorPage->setErrorMessage("A página solicitada não existe!");
             return $errorPage;
         }
         
@@ -94,7 +94,7 @@ class Factory {
             // @codeCoverageIgnoreStart
             //Só entra neste else caso exista alguma classe que não seja Page na pasta dos pages
             $errorPage = self::page('ErrorPage');
-            $errorPage->setErrorMessage("A classe {$className} não é valida!");
+            $errorPage->setErrorMessage("A página solicitada não existe!<br>causa: <small>A classe {$className} não é valida!</small>");
             return $errorPage;
             // @codeCoverageIgnoreEnd
         }
@@ -159,6 +159,9 @@ class Factory {
             default:
                 self::log()->error('Não é possível conectar-se com o banco de dados: "Driver {' . $params['driver'] . '} não suportado"');
                 return null;
+                //$errorPage = self::page('ErrorPage');
+                //$errorPage->setErrorMessage('Não é possível conectar-se com o banco de dados: "Driver {' . $params['driver'] . '} não suportado"');
+                //return $errorPage;
         }
 
         return self::$connections[$idx];
