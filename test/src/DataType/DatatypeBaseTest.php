@@ -1,4 +1,5 @@
 <?php
+namespace MyFrameworkTest\DataType;
 
 class DatatypeBaseTest extends \PHPUnit_Framework_TestCase {
     /**

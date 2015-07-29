@@ -11,7 +11,7 @@ use MyFrameWork\Memory\Memory;
 //failed to open stream: No such file or directory
 
 
-class DatatypeStringTest extends \DatatypeBaseTest {
+class DatatypeStringTest extends DatatypeBaseTest {
 
     /**
      * @var DatatypeString

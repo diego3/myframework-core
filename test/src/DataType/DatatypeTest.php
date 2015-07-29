@@ -4,10 +4,6 @@ namespace MyFrameWork\DataType;
 use MyFrameWork\DataType\Datatype;
 use MyFrameWork\Enum\Flag;
 
-//@todo a Factory nao consegue encontrar o Logger.php
-//Warning: Uncaught require_once(D:\site\www\myframework\test/vendor/apache/log4php/src/main/php/Logger.php): 
-//failed to open stream: No such file or directory
-
 class MyDatatype extends Datatype {
     /**
      * Para efeitos de teste se o $value == $params['value'] então o valor é válido

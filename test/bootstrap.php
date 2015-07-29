@@ -18,7 +18,7 @@ require_once "src/testfunctions.php";
 require_once '/../src/mycore.php';
 
 //classe base para os datatypes do framework
-require_once "src/DataType/DatatypeBaseTest.php";
+//require_once "src/DataType/DatatypeBaseTest.php";
 
 
 $databaseconfig = getConfig(PATH_LOCAL . "/conf/database.local.ini");
