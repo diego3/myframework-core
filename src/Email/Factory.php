@@ -61,7 +61,9 @@ class Factory {
     }
     
     /**
-     * Retorna um Email configurado com fromName e fromEmail a partir do arquivo default de configuração
+     * Retorna um objeto Email configurado com fromName e fromEmail a partir do arquivo default de configuração
+     * 
+     * note: Cria-se o email padrão caso nenhum tipo específico seja escolhido
      * 
      * @param  Emails|string $type  O tipo de email a ser criado use Emails::CONSTANTES
      * @return Email                Retorna a instância de um tipo de email
@@ -81,7 +83,4 @@ class Factory {
        
         return $email;
     }
-    
-   
-    
 }

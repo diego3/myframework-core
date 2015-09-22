@@ -2,6 +2,8 @@
 
 namespace MyFrameWork\Generators;
 
+use MyFrameWork\Common\RemoveAccent;
+
 /**
  * Description of CredentialsGenerator
  * 
@@ -12,18 +14,20 @@ namespace MyFrameWork\Generators;
  */
 class Credential {
     
-    protected static $alphanum = "abcdefghijklmnopqrstuvxz12345890";
+    protected static $alphanum = "ABCDEFGHIJKLMNOPQRSTUVXZabcdefghijklmnopqrstuvxz12345890#";
     
     /**
-     * Gera um nome de usuário baseado no nome de um arquivo
+     * Gera um nome de usuário extraindo letras de um texto qualquer
      * 
-     * @param string $fileName O nome de algum arquivo
+     * @param  string  $string         O texto no qual o nome será extraído
+     * @param  boolean $removeaccents  Se vai manter ou remover os caracteres acentuados
      * @return string     
      */
-    public static function createUserName($fileName) {
-        //e se conviter caracteres de acentuação ?? 
-        // @see MyFrameWork\Common\RemoveAccent and test
-        return substr(str_replace(" ","",$fileName), 0, -4);
+    public static function createUserName($string, $removeaccents = false) {
+        if($removeaccents){
+            $string = (new RemoveAccent())->filter($string);
+        }
+        return strtolower(substr(str_replace(" ","",$string), 0, strpos($string, ' ')+3));
     }
     
     /**
@@ -35,7 +39,7 @@ class Credential {
     public static function createPassword($length = 6) {
         $pass = "";
         for ($i = 0; $i < $length; $i++) {
-            $pass .= static::$alphanum[rand(0, 32)];
+            $pass .= static::$alphanum[rand(0, strlen(static::$alphanum))];
         }
         return $pass;
     }
