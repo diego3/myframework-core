@@ -283,5 +283,22 @@ abstract class Flag extends BasicEnum {
      * @var boolean  valores true ou false, o padrão é false portanto desativado por default
      */
     const FILEIMAGE_HAS_ORDENATOR = 'fileimage_has_ordenator';
+    
+    /**
+     * Configura o texto que vai no link que dispara o modal para selecionar uma imagem
+     * 
+     * @var string
+     */
+    const FILEIMAGE_HELP_TEXT = 'fileimage_help_text';
+    
+    /**
+     * Se vai exibir a imagem padrão para o usuário clicar e escolher o arquivo.
+     * Valor default é TRUE.
+     * Setando para FALSE você precisará setar algum valor para FILEIMAGE_HELP_TEXT o qual
+     * será o link para o usuário clicar para selecionar o arquivo.
+     * 
+     * @var boolean
+     */
+    const FILEIMAGE_SHOW_IMGCOMPONENT = 'fileimage_show_imgcomponent';
 }
 
