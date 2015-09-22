@@ -198,9 +198,9 @@ abstract class DAO {
         }
         else if(is_string($id)) {
             //esse é o único caso que precisa dar update ?
-            $pos = strpos($id, 'Unique violation');
+            //$pos = strpos($id, 'Unique violation');
             
-            if($pos > 0 and $pos !== false) {
+            //if($pos > 0 and $pos !== false) {
                 //remove as pks do array de dados para evitar conflito no comando sql
                 if(is_array($this->pks)) {
                     foreach($this->pks as $pkey) {
@@ -214,8 +214,8 @@ abstract class DAO {
                 }
                 //update
                 return $this->update($data, $pk);
-            }
-            return $id;
+            //}
+            //return $id;
         }
         return $id;
     }
