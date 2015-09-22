@@ -37,11 +37,27 @@ class Date {
         return false;
     }
     
+    /**
+     * Retorna a quantidade de dias que faltam para vencer o prazo.<br>
+     * Faze-se o seguinte cálculo: prazo - hoje
+     * 
+     * NOTE: se já estiver fora de prazo o retorno são os dias em número negativo
+     * 
+     * @param  string|\DateTime $prazo A data a ser usada na subtração
+     * @return int                     A quantidade de dias que faltam      
+     */
     public function diffFromToday($prazo) {
-        $dt_prazo = new DateTime($prazo);
+        if(is_string($prazo)) {
+            $prazo = new DateTime($prazo);
+        }
         $hoje  = new DateTime();
         
-        $dateinterval = $hoje->diff($dt_prazo);/*@var $dateinterval \DateInterval*/
+        $dateinterval = $hoje->diff($prazo);/*@var $dateinterval \DateInterval*/
+        
+        if($hoje > $prazo) {
+            return $dateinterval->days * -1;
+        }
+        
         return $dateinterval->days;
     }
 }
