@@ -64,6 +64,7 @@ class Session {
         $_SESSION['_logged'] = false;
         $_SESSION['_facebookSession'] = false;
         unset($_SESSION);
+        return true;
     }
     
     /**

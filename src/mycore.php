@@ -157,7 +157,8 @@ function isValidEmail($email, $checkDNS = false) {
             which has the same name as a host on your local domain.
             Of course the dot does not alter results that were OK anyway.
             */
-            return checkdnsrr($domain . '.', 'MX');
+            $isValid = checkdnsrr($domain . '.', 'MX');
+            return $isValid;
         }
         return true;
     }
