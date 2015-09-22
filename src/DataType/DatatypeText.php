@@ -20,7 +20,7 @@ class DatatypeText extends DatatypeStringBase {
         if (getValueFromArray($params, Flag::ENCODE_TAGS, false)) {
             return $value;
         }
-        return filter_var($this->valueOf($value), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        return filter_var($this->valueOf($value), FILTER_SANITIZE_STRING , FILTER_FLAG_NO_ENCODE_QUOTES);
     }
     
     /**

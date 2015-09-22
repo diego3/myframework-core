@@ -4,6 +4,7 @@ namespace MyFrameWork\DataType;
 
 use MyFrameWork\DataType\DatatypeStringBase;
 use MyFrameWork\Enum\Flag;
+use MyFrameWork\Factory;
 
 /* 
  * Define o tipo de dado email
@@ -17,7 +18,12 @@ class DatatypeEmail extends DatatypeStringBase {
     }
     
     protected function _isValid($value, $params) {
-        return isValidEmail($value, getValueFromArray($params, Flag::VALIDATE_DOMAIN, false));
+        $result = isValidEmail($value, getValueFromArray($params, Flag::VALIDATE_DOMAIN, false));
+        if(!$result) {
+            Factory::log()->warn("O e-mail {$value} não é um e-mail válido");
+            return false;
+        }
+        return true;
     }
     
     public function isEmpty($value) {

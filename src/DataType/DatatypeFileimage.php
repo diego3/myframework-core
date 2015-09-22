@@ -65,8 +65,18 @@ class DatatypeFileimage extends Datatype {
         $msg = '<small>' . getValueFromArray($params, Flag::PLACEHOLHER, '') . '</small>';
         
         if (empty($value)) {
-            $noimg = HTML::img('image/icons/img-icon.png', 'Nenhuma imagem selecionada', $imgattr);
-            $img   = HTML::link($link, $noimg . 'Adicionar imagem', 'Adicionar imagem', $linkextra);
+            $helpText = getValueFromArray($params, Flag::FILEIMAGE_HELP_TEXT, false);
+            if(!$helpText) {
+                $helpText = 'Adicionar imagem';
+            }
+            
+            $noimg = "";
+            $showImgComponent = getValueFromArray($params, Flag::FILEIMAGE_SHOW_IMGCOMPONENT, true);
+            if($showImgComponent){
+                $noimg = HTML::img('image/icons/img-icon.png', 'Nenhuma imagem selecionada', $imgattr);
+            }
+            
+            $img   = HTML::link($link, $noimg . $helpText, 'Adicionar imagem', $linkextra);
             if($hasOrdenator) {
                 $ordem = $linkextra["data-ordem"];
                 $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
