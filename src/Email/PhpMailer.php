@@ -54,6 +54,7 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
     
     public function __construct() {
         $this->php_mailer = new \PHPMailer;
+        $this->php_mailer->CharSet = "UTF-8";
     }
     
     public function setSmtpServer($smtp) {
@@ -166,6 +167,8 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
         if($this->method == Mailer::SMTP) {
             // 0 = off (for production use)
             $this->php_mailer->SMTPDebug = 0;
+            
+            $this->php_mailer->CharSet = "UTF-8";
             
             if($this->debug_smtp) {
                 //Enable SMTP debugging
