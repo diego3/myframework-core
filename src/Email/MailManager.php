@@ -34,6 +34,13 @@ class MailManager {
         return $this->mailer->checkSmtp();
     }
     
+    /**
+     * 
+     * @return \MyFrameWork\Email\Mailer 
+     */
+    public function getMailer() {
+        return $this->mailer;
+    }
     
     public function send(AbstractEmail $email) {
         try{
@@ -78,5 +85,4 @@ class MailManager {
         }
         return false;
     }
-    
 }

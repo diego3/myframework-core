@@ -32,7 +32,7 @@ class Factory {
     /**
      * 
      * @param  const  $type   Mailers::CONSTANTS
-     * @return Mailer
+     * @return MailManager
      * @throws InvalidMailerException
      */
     public static function getMailManager($type) {

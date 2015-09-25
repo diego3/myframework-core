@@ -50,7 +50,8 @@ class DatatypeFileimage extends Datatype {
             'data-target'    => '#myFileUpload',
             'data-up-action' => 'fileupload',
             'data-hiddenid'  => $name . '_id',
-            'data-imgid'     => $name . '_img_id'
+            'data-imgid'     => $name . '_img_id',
+            'class' => 'filemanager-action-link'
         ];
         
         $linkextra = array_merge($linkextra, $attr);
