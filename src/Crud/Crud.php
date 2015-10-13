@@ -397,7 +397,7 @@ class Crud {
             if ($action) {
                 $actions = HTML::link(
                     $m->renderHTML($urledit, $row),
-                    '<span class="glyphicon glyphicon-pencil"></span> Editar',
+                    '<span class="glyphicon glyphicon-pencil"></span>',
                     'Editar este item',
                     ['class' => 'btn btn-default ']
                 );
@@ -406,7 +406,7 @@ class Crud {
 
                 $actions .= ' ' . HTML::link(
                     $m->renderHTML($urldelete, $row),
-                    '<span class="glyphicon glyphicon-trash"></span> Deletar',
+                    '<span class="glyphicon glyphicon-trash"></span>',
                     'Excluir este item',
                     ['class' => 'btn btn-danger ']
                 );
