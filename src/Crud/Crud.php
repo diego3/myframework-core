@@ -157,8 +157,9 @@ class Crud {
     }
     
     /**
+     * Monta os dados do formulário para inserir ou editar um registro 
      * 
-     * @param  int   $id
+     * @param  int   $id         O id do page
      * @param  array $formdata   As informações fornecidas pelo addParameter
      * @param  array $formvalues Valores de todos os campos do formulário já validados
      * @return array
@@ -221,9 +222,17 @@ class Crud {
     }
     
     /**
+     * Executa um INSERT ou UPDATE no DAO do Crud atual.
      * 
-     * @param int $id        O identificador da tabela
-     * @param array $values  Os valores depois do processo de limpeza e validação
+     * Por padrão o Crud usa o método insert e update do DAO. 
+     * É possível alterar esses métodos utilizando Crud::INSERT_METHOD => 'methodName' e Crud::UPDATE_METHOD usando o Crud::setConfig
+     * 
+     * @note   Caso você usa Crud::UPDATE_METHOD não esqueça que o Crud SEMPRE vai jogar o campo ID
+     *         no ULTIMO parâmetro do seu método!
+     *         exemplo: seu método deve ter a seguinte assinatura:  MeuDAO::atualiza($campo, $ID); não esqueça! coloque o ID sempre no ULTIMO parâmetro!
+     * 
+     * @param  int    $id        O identificador da tabela
+     * @param  array $values     Os valores depois do processo de limpeza e validação
      * @return mixed          
      */
     public function save($id, array $values) {
@@ -243,7 +252,9 @@ class Crud {
             $method = getValueFromArray($this->config, static::UPDATE_METHOD, 'update');
             if($method !== 'update') {
                 $parametros = getValueFromArray($this->config, static::SAVE_METHOD_PARAMS, array_values($values));
+                //coloca o id no ultimo parametro do metodo que o desenvolvedor configurou
                 array_push($parametros, $id);
+                //chama o metodo dinamicamente
                 $retorno = call_user_func_array([ $this->dao, $method ], $parametros);
             }
             else if($method == 'update') {
