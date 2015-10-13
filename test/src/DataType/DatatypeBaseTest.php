@@ -32,6 +32,7 @@ CODE;
         $this->data['double'] = 1234.1234;
         $this->data['email'] = 'joaao@uol.com.br';
         $this->data['invalidemail'] = 'teste.com.br@joaao@uol.com.br';
+        $this->data['slashstring'] = 'Maria D\' Ávila';
      }
 
 }

@@ -5,14 +5,9 @@ namespace MyFrameWork\DataType;
 use MyFrameWork\DataType\DatatypeString;
 use MyFrameWork\Enum\Flag;
 use MyFrameWork\Memory\Memory;
-
-//@todo a Factory nao consegue encontrar o Logger.php
-//Warning: Uncaught require_once(D:\site\www\myframework\test/vendor/apache/log4php/src/main/php/Logger.php): 
-//failed to open stream: No such file or directory
-
+use MyFrameworkTest\DataType\DatatypeBaseTest;
 
 class DatatypeStringTest extends DatatypeBaseTest {
-
     /**
      * @var DatatypeString
      */
@@ -39,6 +34,7 @@ class DatatypeStringTest extends DatatypeBaseTest {
         $this->assertEquals(strip_tags($this->data['html']), $this->object->sanitize($this->data['html']));
         $this->assertEquals(trim($this->data['text']), $this->object->sanitize($this->data['text']));
         $this->assertEquals('', $this->object->sanitize($this->data['code']));
+        $this->assertEquals('Maria D\' Ávila', $this->object->sanitize($this->data["slashstring"]));
         
         $param = array(Flag::ENCODE_TAGS => true);
         $this->assertEquals(htmlentities($this->data['code']), $this->object->sanitize($this->data['code'], $param));
