@@ -80,7 +80,9 @@ class DatatypeFileimage extends Datatype {
             $img   = HTML::link($link, $noimg . $helpText, 'Adicionar imagem', $linkextra);
             if($hasOrdenator) {
                 $ordem = $linkextra["data-ordem"];
-                $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
+                if(!empty($value)){
+                    $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
+                }
             }
         }
         else {
