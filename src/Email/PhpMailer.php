@@ -91,7 +91,7 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
 
         try {
             //Connect to an SMTP server
-            if ($smtp->connect($this->getSmtpServer()->getSmtpHost(), 25)) {
+            if ($smtp->connect($this->getSmtpServer()->getSmtpHost(), $this->getSmtpServer()->getSmtpPort())) {
                 //Say hello
                 if ($smtp->hello($this->smtp->getSmtpHost())) { //Put your host name in here
                     //Authenticate
@@ -187,7 +187,7 @@ class PhpMailer implements Mailer , SmtpAwareInterface {
             $this->php_mailer->Port = $this->smtp->getSmtpPort();
 
             //Set the encryption system to use - ssl (deprecated) or tls
-            //$this->php_mailer->SMTPSecure = $this->smtp->getSmtpSecure();
+            $this->php_mailer->SMTPSecure = $this->smtp->getSmtpSecure();
 
             //Whether to use SMTP authentication
             $this->php_mailer->SMTPAuth = true;
