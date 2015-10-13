@@ -43,10 +43,11 @@ class Date {
      * 
      * NOTE: se já estiver fora de prazo o retorno são os dias em número negativo
      * 
-     * @param  string|\DateTime $prazo A data a ser usada na subtração
-     * @return int                     A quantidade de dias que faltam      
+     * @param  string|\DateTime $prazo           A data a ser usada na subtração
+     * @param  boolean          $returnNegative  se true retorna os dias passados em dias negativos
+     * @return int                               A quantidade de dias que faltam  ou zero ou números negativos caso o segundo parametro seja true    
      */
-    public function diffFromToday($prazo) {
+    public function diffFromToday($prazo, $returnNegative = false) {
         if(is_string($prazo)) {
             $prazo = new DateTime($prazo);
         }
@@ -55,7 +56,10 @@ class Date {
         $dateinterval = $hoje->diff($prazo);/*@var $dateinterval \DateInterval*/
         
         if($hoje > $prazo) {
-            return $dateinterval->days * -1;
+            if($returnNegative) {
+                return $dateinterval->days * -1;
+            }
+            return 0;
         }
         
         return $dateinterval->days;

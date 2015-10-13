@@ -27,7 +27,7 @@ class Credential {
         if($removeaccents){
             $string = (new RemoveAccent())->filter($string);
         }
-        return strtolower(substr(str_replace(" ","",$string), 0, strpos($string, ' ')+3));
+        return strtolower(substr(str_replace(" ","",$string), 0, -4));
     }
     
     /**
