@@ -32,9 +32,6 @@
     "autoload": {
         "psr-4": {
             "MyFrameWork\\": "src/"
-        },
-        "psr-4": {
-            "MyFrameworkTest\\": "test/src/"
         }
     }
 }
