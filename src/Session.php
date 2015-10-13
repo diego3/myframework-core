@@ -61,9 +61,7 @@ class Session {
      * Realiza o logout 
      */
     public function logout() {
-        $_SESSION['_logged'] = false;
-        $_SESSION['_facebookSession'] = false;
-        unset($_SESSION);
+        $_SESSION = [];
         return true;
     }
     
