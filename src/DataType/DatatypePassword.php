@@ -9,7 +9,7 @@ use MyFrameWork\DataType\DatatypeString;
  *
  * @author Diego
  */
-class DataTypePassword  extends DatatypeString {
+class DatatypePassword  extends DatatypeString {
     
     protected function getHTMLInputType() {
         return "password";

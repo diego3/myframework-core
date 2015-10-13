@@ -2,7 +2,7 @@
 
 namespace MyFrameWork\DataType;
 
-use MyFrameWork\DataType\DataTypePK;
+use MyFrameWork\DataType\DatatypePK;
 use MyFrameWork\Enum\Flag;
 use MyFrameWork\HTML;
 use MyFrameWork\Template;
@@ -16,7 +16,7 @@ use MyFrameWork\Factory;
  * 
  * @author Diego Rosa dos Santos<diegosantos@alphaeditora.com.br>
  */
-class DataTypeMultiselect extends DataTypePK {
+class DatatypeMultiselect extends DatatypePK {
     
     /**
      * Retorna a lista de items no parâmetro
@@ -38,7 +38,7 @@ class DataTypeMultiselect extends DataTypePK {
      * 
      * @param string $name
      * @param string $value
-     * @param array $params
+     * @param array $params Form values
      * @param array $attr
      * @return string
      */
@@ -51,8 +51,13 @@ class DataTypeMultiselect extends DataTypePK {
         $template = PATH_DEFAULT . '/view/partials/checkboxes.mustache';
         
         $params = $this->normalizeParams($params);
-        $dao = $this->getDAO($params);
+        $dao = $this->getDAO($params);//gera o dao a partir da flag Flag::DAO_NAME setada no page correspondente via addParameter(...)
         $dados = $dao->listAll();
+        
+        //var_dump($value, $params, $dados);
+        //foreach($dados as $index => $linha){
+        //    $dados[$index]["belong"] = rand(0, 1) > 0;
+        //}
         
         $vetor["list"] = $dados;
         $vetor["param_name"] = $name;
