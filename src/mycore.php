@@ -198,6 +198,10 @@ function httpRequest($method, $url, $data=array(), $output='html') {
         $url .= '?' . http_build_query($data);
     }
     
+    if(isset($_GET["debug"]) and $_GET["debug"] === "curl"){
+        var_dump($url);
+    }
+    
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

@@ -26,7 +26,9 @@ class HtmlResponse implements Response {
             }
             $template->showRenderTemplate($file, $content);
             if (Memory::get('debug', false)) {
+                echo "<pre>";
                 var_dump($content);
+                echo "</pre>";
             }
         }
         else {

@@ -318,8 +318,9 @@ abstract class ProcessRequest {
                         'js' => MemoryPage::getJs(),
                         'extraheader' => MemoryPage::getExtraHeader()
                     ),
-                    '_page' => get_class($this),
-                    '_action' => $this->method
+                    '_page'     => get_class($this),
+                    '_pagename' => strtolower(getClassNameFromNamespace(get_class($this))),//nome do page q vem da url
+                    '_action'   => $this->method
                 )
             );
         }
