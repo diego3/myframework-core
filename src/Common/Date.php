@@ -18,7 +18,7 @@ class Date {
      * @return boolean
      * @throws Exception caso o $prazo seja uma data invalida
      */
-    public function isValid($prazo) {
+    public function isValid($prazo) { //@todo refatorar o nome do método para acabouPrazo
         if($prazo instanceof DateTime) {
             $dt_prazo = $prazo;
         }
@@ -30,6 +30,9 @@ class Date {
         }
         
         $hoje  = new DateTime();
+        
+        //add + 1 dia na data do prazo
+        $dt_prazo->add(new \DateInterval("P1D"));//altera o objeto original, apensar de retornar DateTime
         
         if($hoje > $dt_prazo) {
             return true;
