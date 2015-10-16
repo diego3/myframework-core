@@ -399,7 +399,7 @@ class Crud {
                     $m->renderHTML($urledit, $row),
                     '<span class="glyphicon glyphicon-pencil"></span>',
                     'Editar este item',
-                    ['class' => 'btn btn-default ']
+                    ['class' => 'btn btn-default btn-xs']
                 );
                 
                 $actions .= ' ' . $this->getUserActions($m, $row);
@@ -408,7 +408,7 @@ class Crud {
                     $m->renderHTML($urldelete, $row),
                     '<span class="glyphicon glyphicon-trash"></span>',
                     'Excluir este item',
-                    ['class' => 'btn btn-danger ']
+                    ['class' => 'btn btn-danger btn-xs']
                 );
                 
                 $item["actions"] = $actions;
