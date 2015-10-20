@@ -63,7 +63,7 @@ class DatatypeFileimage extends Datatype {
         
         $hasOrdenator = getValueFromArray($params, Flag::FILEIMAGE_HAS_ORDENATOR, false);
         
-        $msg = '<small>' . getValueFromArray($params, Flag::PLACEHOLHER, '') . '</small>';
+        $placeholder = '<small>' . getValueFromArray($params, Flag::PLACEHOLHER, '') . '</small>';
         
         if (empty($value)) {
             $helpText = getValueFromArray($params, Flag::FILEIMAGE_HELP_TEXT, false);
@@ -75,14 +75,19 @@ class DatatypeFileimage extends Datatype {
             $showImgComponent = getValueFromArray($params, Flag::FILEIMAGE_SHOW_IMGCOMPONENT, true);
             if($showImgComponent){
                 $noimg = HTML::img('image/icons/img-icon.png', 'Nenhuma imagem selecionada', $imgattr);
+                $img   = $noimg . HTML::link($link, $helpText, 'Adicionar imagem', $linkextra);
+            }
+            else {
+               $img   = HTML::link($link, $noimg . $helpText, 'Adicionar imagem', $linkextra); 
             }
             
-            $img   = HTML::link($link, $noimg . $helpText, 'Adicionar imagem', $linkextra);
             if($hasOrdenator) {
                 $ordem = $linkextra["data-ordem"];
-                if(!empty($value)){
-                    $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
-                }
+                $paginaformandoid = isset($linkextra["data-pagina_id"]) ? $linkextra["data-pagina_id"] : '';
+                $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
+                $img .= "<div class='glyphicon glyphicon-trash unselect' 
+                        data-ordem='".$ordem."' data-paginaformando_id=' ".$paginaformandoid." '   style='display:none;'
+                        title='clique aqui para remover esta imagem!'></div>";
             }
         }
         else {
@@ -90,10 +95,14 @@ class DatatypeFileimage extends Datatype {
             $img .= HTML::link($link, 'Alterar imagem', 'Trocar a imagem', $linkextra);
             if($hasOrdenator) {
                 $ordem = $linkextra["data-ordem"];
+                $paginaformandoid = isset($linkextra["data-pagina_id"]) ? $linkextra["data-pagina_id"] : '';
                 $img .= "<div class='fileimage-ordem' title='ordem da imagem nesta página personalizada'>{$ordem}</div>";
+                $img .= "<div class='glyphicon glyphicon-trash unselect' 
+                        data-ordem='".$ordem."' data-paginaformando_id=' ".$paginaformandoid." '   
+                        title='clique aqui para remover esta imagem!'></div>";
             }
         }
-        return $msg . $img . HTML::input($name, array('value' => $value), $name . '_id', 'hidden');
+        return $placeholder . $img . HTML::input($name, array('value' => $value), $name . '_id', 'hidden');
     }
 }
 
