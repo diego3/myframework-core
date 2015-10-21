@@ -393,6 +393,7 @@ abstract class ProcessRequest {
                 $cleaned = $type->sanitize($received, $itemdata['params']);//faz os filtros, verifica os tipos e tals
                 if (!$type->isValid($cleaned, $itemdata['params'])) {//chama os metodos isValid* da biblioteca respect/Validator
                     $this->parametersMeta[$method][$itemname]['error'] = LoggerApp::getLastError();
+                    LoggerApp::clear();
                     continue;
                 }
                 if (is_bool($cleaned)) {
