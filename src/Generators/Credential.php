@@ -14,7 +14,7 @@ use MyFrameWork\Common\RemoveAccent;
  */
 class Credential {
     
-    protected static $alphanum = "ABCDEFGHIJKLMNOPQRSTUVXZabcdefghijklmnopqrstuvxz12345890#";
+    protected static $alphanum = "ABCDEFGHIJKLMNOPQRSTUVXZabcdefghijklmnopqrstuvxz12345890$@#";
     
     /**
      * Gera um nome de usuário extraindo letras de um texto qualquer
