@@ -65,6 +65,12 @@ class Crud {
     const SHOW_TABLE_ACTIONS = 'show_table_actions';
     
     /**
+     * Exibe ou não o botão de remoção do item
+     * @var boolean
+     */
+    const SHOW_DELETE_LINK = 'show_delete_link';
+    
+    /**
      * Define a URL para edição ou exclusão
      * @var string
      */
@@ -467,6 +473,7 @@ class Crud {
         foreach ($dados as $row) {
             $td = [];
             foreach ($schema as $template) {
+                //date format would can be here :)
                 $td[] = $t->renderHTML($template, $row);
             }
             if ($action) {
@@ -478,13 +485,16 @@ class Crud {
                 );
                 
                 $actions .= ' ' . $this->getUserActions($t, $row);
-
-                $actions .= ' ' . HTML::link(
-                    $t->renderHTML($urldelete, $row),
-                    '<span class="glyphicon glyphicon-trash"></span>',
-                    'Excluir este item',
-                    ['class' => 'btn btn-danger  btn-xs confirmacao']
-                );
+                
+                $showDelete = getValueFromArray($this->config, Crud::SHOW_DELETE_LINK, true);
+                if($showDelete) {
+                    $actions .= ' ' . HTML::link(
+                        $t->renderHTML($urldelete, $row),
+                        '<span class="glyphicon glyphicon-trash"></span>',
+                        'Excluir este item',
+                        ['class' => 'btn btn-danger  btn-xs confirmacao']
+                    );
+                }
                 
                 $td[] = $actions;
             }
